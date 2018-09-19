@@ -7,7 +7,7 @@ You will need to be creative when deciding how to layout the data.
 Your app should be able to filter on the criteria of your choosing.
 The user should be able to click on a pokemon for more information.
 
-## Libraries allows
+## Libraries allowed
 
 * React (obviously 😃 )
 * React-Router - not required but a huge plus
