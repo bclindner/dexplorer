@@ -1,4 +1,4 @@
-# Welcome to Project-Pok
+# Welcome to Project-Pokédex
 
 ### Task
 
