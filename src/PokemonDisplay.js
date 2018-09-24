@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Title } from './Style.js'
+import { Container, Row, Col, ResponsiveImg } from './Layout.js'
 
 /**
  * Container component for the Pokemon informational display.
@@ -18,16 +20,19 @@ class PokemonDisplayContainer extends Component {
   async clearPokemonData () {
     // WHY DOES SETSTATE USE CALLBACKS
     return new Promise((resolve, reject) => {
-      this.setState({
-        pokemon: {},
-        species: {},
-        speciesLoaded: false,
-        pokemonLoaded: false
-      }, resolve())
+      try {
+        this.setState({
+          pokemon: {},
+          species: {},
+          speciesLoaded: false,
+          pokemonLoaded: false
+        }, resolve())
+      } catch (e) {
+        reject(e)
+      }
     })
   }
   async getPokemonData (name) {
-    console.log('doing it')
     await this.clearPokemonData()
     // get the pokemon-species data
     const pokemonSpeciesEndpoint = `${this.props.baseurl}/api/v2/pokemon-species/${name}/`
@@ -55,49 +60,100 @@ const PokemonDisplayTest = (props) => {
   const pokemon = props.pokemon
   const species = props.species
   return (
-    <div>
-      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-      <h1>{species.name}</h1>
-      <p>
-        types:&nbsp;
-        {
-          pokemon.types.length > 1
-            ? <span>{pokemon.types[0].type.name} / {pokemon.types[1].type.name}</span>
-            : <span>{pokemon.types[0].type.name}</span>
-        }
-      </p>
-      <p>
-        abilities:&nbsp;
-        {
-          pokemon.abilities.length > 1
-            ? <span>{pokemon.abilities[0].ability.name} / {pokemon.abilities[1].ability.name}</span>
-            : <span>{pokemon.abilities[0].ability.name}</span>
-        }
-      </p>
-      <p>height: {pokemon.height / 10}m</p>
-      <p>weight: {pokemon.weight / 10}kg</p>
-      <p>gender rate: {species.gender_rate / 8 * 100}% female to {(1 - species.gender_rate / 8) * 100}% male</p>
-      <p>stats: </p>
-      <table>
-        <thead>
-          <tr>
-            <td>stat name</td>
-            <td>base stat</td>
-            <td>effort value</td>
-          </tr>
-        </thead>
-        <tbody>
-          {pokemon.stats.map((stat, i) => (
-            <tr key={i}>
-              <td>{stat.stat.name}</td>
-              <td>{stat.base_stat}</td>
-              <td>{stat.effort}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Container>
+      <Row>
+        <Col span='3'>
+          <ResponsiveImg src={pokemon.sprites.front_default} />
+        </Col>
+        <Col span='9'>
+          <MainInfoDisplay pokemon={pokemon} species={species} />
+        </Col>
+      </Row>
+      <Row>
+        <Col span='6'>
+          <EVValueViewer stats={pokemon.stats} />
+        </Col>
+      </Row>
+    </Container>
   )
 }
+
+const MainInfoDisplay = (props) => (
+  <div>
+    <p>#{props.species.pokedex_numbers.find(pokedex => pokedex.pokedex.name === 'national').entry_number}</p>
+    <Title>{props.species.name}</Title>
+    <TypeDisplay types={props.pokemon.types} />
+    <AbilityDisplay abilities={props.pokemon.abilities} />
+    <p>height: {props.pokemon.height / 10}m</p>
+    <p>weight: {props.pokemon.weight / 10}kg</p>
+    <GenderDisplay genderRate={props.species.gender_rate} />
+    {props.species.evolves_from_species &&
+      <p>evolves from {props.species.evolves_from_species.name}</p>
+    }
+  </div>
+)
+
+const EVValueViewer = (props) => (
+  <Container>
+    <h2>effort values: </h2>
+    <Row>
+      <Col span='2'>
+        <p>HP</p>
+        {props.stats.find((stat, i) => stat.stat.name === 'hp').effort}
+      </Col>
+      <Col span='2'>
+        <p>Attack</p>
+        {props.stats.find((stat, i) => stat.stat.name === 'attack').effort}
+      </Col>
+      <Col span='2'>
+        <p>Defense</p>
+        {props.stats.find((stat, i) => stat.stat.name === 'defense').effort}
+      </Col>
+      <Col span='2'>
+        <p>Sp.Atk.</p>
+        {props.stats.find((stat, i) => stat.stat.name === 'special-attack').effort}
+      </Col>
+      <Col span='2'>
+        <p>Sp.Def.</p>
+        {props.stats.find((stat, i) => stat.stat.name === 'special-defense').effort}
+      </Col>
+      <Col span='2'>
+        <p>Speed</p>
+        {props.stats.find((stat, i) => stat.stat.name === 'speed').effort}
+      </Col>
+    </Row>
+  </Container>
+)
+
+const TypeDisplay = (props) => (
+  <p>
+    types:&nbsp;
+    {
+      props.types.length > 1
+        ? <span>{props.types[0].type.name} / {props.types[1].type.name}</span>
+        : <span>{props.types[0].type.name}</span>
+    }
+  </p>
+)
+
+const AbilityDisplay = (props) => (
+  <p>
+    abilities:&nbsp;
+    {
+      props.abilities.length > 1
+        ? <span>{props.abilities[0].ability.name} / {props.abilities[1].ability.name}</span>
+        : <span>{props.abilities[0].ability.name}</span>
+    }
+  </p>
+)
+
+const GenderDisplay = (props) => (
+  <p>
+    {props.genderRate === -1
+      ? <span>genderless</span>
+      : <span>gender rate: {props.genderRate / 8 * 100}% female to {(1 - props.genderRate / 8) * 100}% male</span>
+    }
+  </p>
+)
 
 export default PokemonDisplayContainer
