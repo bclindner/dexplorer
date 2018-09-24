@@ -76,7 +76,7 @@ const PokemonDisplayTest = (props) => {
       </p>
       <p>height: {pokemon.height / 10}m</p>
       <p>weight: {pokemon.weight / 10}kg</p>
-      <p>gender rate: {species.gender_rate} female to 8 males</p>
+      <p>gender rate: {species.gender_rate / 8 * 100}% female to {(1 - species.gender_rate / 8) * 100}% male</p>
       <p>stats: </p>
       <table>
         <thead>
