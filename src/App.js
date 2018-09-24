@@ -1,9 +1,11 @@
-import React, { Component } from "react";
+import React from 'react'
+import PokemonDisplay from './PokemonDisplay.js'
+import { Route } from 'react-router-dom'
 
-class App extends Component {
-  render() {
-    return <div />;
-  }
-}
+const App = () => (
+  <Route path='/:speciesName' render={
+    (props) => <PokemonDisplay {...props} baseurl='https://pokeapi.co' />
+  } />
+)
 
-export default App;
+export default App
