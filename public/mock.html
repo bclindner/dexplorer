@@ -1,0 +1,438 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: sans-serif;
+        min-height: 100vh;
+      }
+      .wrapper {
+        width: 80%;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+      /* responsive grid layout w/ flex */
+      .rgRow {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      [class^="rgCol"] {
+        min-height: 100%;
+        flex-flow: column nowrap;
+        height: 100%;
+      }
+      .rgCol2 {
+        flex: 16.66%;
+      }
+      .rgCol3 {
+        flex: 25%;
+      }
+      .rgCol4 {
+        flex: 33.33%;
+      }
+      .rgCol6 {
+        flex: 50%;
+        padding: 1em;
+      }
+      .rgCol8 {
+        flex: 66.66%;
+      }
+      .rgCol9 {
+        flex: 75%;
+      }
+      .rgCol, .rgCol12 {
+        flex: 100%;
+      }
+      /* mobile breakpoint */
+      @media only screen and (max-width: 800px) {
+        .wrapper {
+          width: 100%;
+        }
+        .rgRow {
+          flex-flow: column nowrap;
+        }
+      }
+      /* misc. responsive classes */
+      .rgImage {
+        width: 100%;
+        background-color: #eee;
+        height: auto;
+      }
+      /* page styles */
+      .sidebar {
+        height: 100%;
+      }
+      .main {
+        height: 100%;
+        padding: 1em;
+      }
+      .listContainer {
+        height: 100%;
+      }
+      .listContainer ul {
+        padding: 0;
+        margin: 0;
+      }
+      .searchBar {
+        width: 100%;
+        padding: 1em;
+        margin: 1em 0;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+      .listContainer ul {
+        height: 100%;
+        overflow-y: scroll;
+      }
+      .listContainer ul li {
+        list-style-type: none;
+        padding: 1em 1em;
+        margin: 0.5em 8px 0.5em 0;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+      h1.pokemonName {
+        margin: 0;
+        display: inline-block;
+      }
+      .pokemonData {
+        padding: 0.5em 0;
+        margin: 0;
+      }
+      .pokemonDataContainer {
+        padding: 0 1em;
+      }
+      .pbarOuter {
+        position: relative;
+        width: 100%;
+        height: 1.25em;
+        background-color: #ddd;
+      }
+      .pbarInner {
+        position:relative;
+        height: 100%;
+        background-color: #4286f4;
+      }
+      .pbarLabel {
+        font-family: sans-serif;
+        width: 100%;
+        height: 1.5em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        text-align: center;
+        z-index: 2;
+      }
+      .statHP {
+        background-color: #FF5959;
+      }
+      .statAtk {
+        background-color: #F5AC78;
+      }
+      .statDef {
+        background-color: #FAE078;
+      }
+      .statSpAtk {
+        background-color: #9DB7F5;
+      }
+      .statSpDef {
+        background-color: #A7DB8D;
+      }
+      .statSpeed {
+        background-color: #FA92B2;
+      }
+      .moveList {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+      .moveList thead tr {
+      }
+      .moveList th {
+        text-align: left;
+      }
+      .moveList th, .moveList td {
+        padding: 0.5em;
+        margin: 0;
+      }
+      .moveList tr:nth-of-type(even) {
+        background-color: #eee;
+      }
+      .moveList tbody {
+        width: 100%;
+        height: 100px;
+        max-height: 100px;
+        overflow-y: scroll;
+      }
+      .evDisplay {
+        height: 100%;
+        padding: 4px;
+        border: 4px solid #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="rgRow">
+        <header class="rgCol12">
+          <h1>Dexplorer</h1>
+          <hr>
+        </header>
+      </div>
+      <div class="rgRow">
+        <div class="rgCol3">
+          <aside class="sidebar">
+            <input class="searchBar" name="search" placeholder="Search by name..." type="text">
+            <div class="listContainer">
+              <ul>
+                <li>Bulbasaur</li>
+                <li>Ivysaur</li>
+                <li>Venusaur</li>
+                <li>Bulbasaur</li>
+                <li>Ivysaur</li>
+                <li>Venusaur</li>
+                <li>Bulbasaur</li>
+                <li>Ivysaur</li>
+                <li>Venusaur</li>
+                <li>Bulbasaur</li>
+                <li>Ivysaur</li>
+                <li>Venusaur</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+        <div class="rgCol9">
+          <main class="main">
+            <div class="rgRow">
+              <div class="rgCol4">
+                <img class="rgImage" src="https://cdn.bulbagarden.net/upload/thumb/e/e4/384Rayquaza.png/250px-384Rayquaza.png" alt="Rayquaza">
+              </div>
+              <div class="rgCol8">
+                <div class="pokemonDataContainer">
+                  <small>#384</small><br>
+                  <h1 class="pokemonName">Rayquaza</h1>
+                  <small>Flying / Dragon</small>
+                  <p class="pokemonData">Abilities: Air-Lock</p>
+                  <p class="pokemonData">Height: 7m</p>
+                  <p class="pokemonData">Abilities: 206.5kg</p>
+                  <p class="pokemonData">Genderless</p>
+                  <p class="pokemonData">Rayquaza lived for hundreds of millions of years in the earth's ozone layer, never descending to the ground. This Pokemon appears to feed on water and particles in the atmosphere.</p>
+                </div>
+              </div>
+            </div>
+            <div class="rgRow">
+              <div class="rgCol6">
+                <h2>Base Stats</h2>
+                <table>
+                  <tbody><tr>
+                    <td>HP</td>
+                    <td class="pbarOuter">
+                      <div class="pbarInner statHP" style="width: 41%;"></div>
+                      <div class="pbarLabel">105</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Atk</td>
+                    <td class="pbarOuter">
+                      <div class="pbarInner statAtk" style="width: 58%;"></div>
+                      <div class="pbarLabel">150</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Def</td>
+                    <td class="pbarOuter">
+                      <div class="pbarInner statDef" style="width: 35%;"></div>
+                      <div class="pbarLabel">90</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Sp.Atk.</td>
+                    <td class="pbarOuter">
+                      <div class="pbarInner statSpAtk" style="width: 58%;"></div>
+                      <div class="pbarLabel">150</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Sp.Def.</td>
+                    <td class="pbarOuter">
+                      <div class="pbarInner statSpDef" style="width: 35%;"></div>
+                      <div class="pbarLabel">90</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Speed</td>
+                    <td class="pbarOuter">
+                      <div class="pbarInner statSpeed" style="width: 37%;"></div>
+                      <div class="pbarLabel">95</div>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </div>
+              <div class="rgCol6">
+                <h2>Effort Values</h2>
+                <div class="rgRow">
+                  <div class="rgCol4">
+                    <div class="statHP evDisplay">
+                      HP<br>
+                      0
+                    </div>
+                  </div>
+                  <div class="rgCol4">
+                    <div class="statAtk evDisplay">
+                      Atk<br>
+                      2
+                    </div>
+                  </div>
+                  <div class="rgCol4">
+                    <div class="statDef evDisplay">
+                      Def<br>
+                      0
+                    </div>
+                  </div>
+                  <div class="rgCol4">
+                    <div class="statSpAtk evDisplay">
+                      SpAtk<br>
+                      1
+                    </div>
+                  </div>
+                  <div class="rgCol4">
+                    <div class="statSpDef evDisplay">
+                      SpDef<br>
+                      0
+                    </div>
+                  </div>
+                  <div class="rgCol4">
+                    <div class="statSpeed evDisplay">
+                      Speed<br>
+                      0
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rgRow">
+              <div class="rgCol6">
+                <h2>Moveset</h2>
+                  <table class="moveList">
+                    <thead>
+                      <tr>
+                        <th>Level</th>
+                        <th>Move</th>
+                        <th>Learned By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Tackle</td>
+                        <td>Level Up</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+              <div class="rgCol6">
+                <h2>Other Info</h2>
+                <p class="pokemonData"><strong>Catch Rate</strong> 45</p>
+                <p class="pokemonData"><strong>Catch Rate</strong> 45</p>
+                <p class="pokemonData"><strong>Catch Rate</strong> 45</p>
+                <p class="pokemonData"><strong>Catch Rate</strong> 45</p>
+                <p class="pokemonData"><strong>Catch Rate</strong> 45</p>
+                <p class="pokemonData"><strong>Catch Rate</strong> 45</p>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+      <div class="rgCol12">
+        <hr>
+        <footer>
+          Developed by Brian Lindner, 2018. Made with <a href="https://reactjs.org">React</a> and the <a href="https://pokeapi.co">PokeAPI</a>.
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
