@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Wrapper, Sidebar, SearchBar, LoadingSpinner } from './Style.js'
+import { Wrapper, Sidebar, SearchBar, LoadingSpinner, PokemonList, PokemonListItem } from './Style.js'
 import { RG } from './Layout.js'
 
 /**
@@ -42,7 +42,7 @@ class PokemonDisplayContainer extends Component {
             <PokemonSearchBar />
           </RG.Col>
           <RG.Col span='8'>
-            <PokemonDisplay />
+            <LoadingSpinner />
           </RG.Col>
         </RG.Row>
         <RG.Row>
@@ -67,7 +67,7 @@ const Footer = () => (
 )
 
 class PokemonSearchBar extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       pokemonList: {}
@@ -99,7 +99,7 @@ class PokemonSearchBar extends Component {
         <SearchBar name='search' placeholder='Search by name...' type='text' />
         <div>
           {this.state.pokemonList.length > 1
-            ? <PokemonResultsList list={this.state.pokemonList}/>
+            ? <PokemonResultsList list={this.state.pokemonList} />
             : <LoadingSpinner />
           }
         </div>
@@ -129,11 +129,11 @@ class PokemonDisplay extends Component {
 }
 
 const PokemonResultsList = (props) => (
-  <ul>
+  <PokemonList>
     {props.list.map((item) => (
-      <li>{item.name}</li>
+      <PokemonListItem>{item.name}</PokemonListItem>
     ))}
-  </ul>
+  </PokemonList>
 )
 
 export default PokemonDisplayContainer
