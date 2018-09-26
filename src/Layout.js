@@ -1,26 +1,19 @@
 import styled from 'styled-components'
 
-export const Container = styled.div`
-  box-sizing: border-box;
-  width: 100%
-`
+export const RG = {}
 
-export const Row = styled.div`
-  box-sizing: border-box;
-  &::after {
-    clear: both;
-    content: "";
-    display: block;
+RG.Row = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  @media only screen and (max-width: 800px) {
+    flex-flow: column nowrap;
   }
 `
-export const ResponsiveImg = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
+
+RG.Col = styled.div`
+  flex: ${props => props.span * 8.33}%;
 `
 
-export const Col = styled.div`
-  box-sizing: border-box;
-  width: ${props => props.span * 8.33}%;
-  float: left;
+RG.Image = styled.img`
+  width: 100%;
 `
