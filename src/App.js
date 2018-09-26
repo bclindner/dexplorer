@@ -1,10 +1,10 @@
 import React from 'react'
-import PokemonDisplay from './PokemonDisplay.js'
+import PokemonDisplayContainer from './PokemonDisplay.js'
 import { Route } from 'react-router-dom'
 
 const App = () => (
   <Route path='/:speciesName' render={
-    (props) => <PokemonDisplay {...props} baseurl='https://pokeapi.co' />
+    (props) => <PokemonDisplayContainer {...props} baseurl='https://pokeapi.co' />
   } />
 )
 

@@ -42,7 +42,7 @@ class PokemonDisplayContainer extends Component {
             <PokemonSearchBar />
           </RG.Col>
           <RG.Col span='8'>
-            <LoadingSpinner />
+            <PokemonDisplay />
           </RG.Col>
         </RG.Row>
         <RG.Row>
@@ -88,6 +88,7 @@ class PokemonSearchBar extends Component {
     return window.fetch('https://pokeapi.co/api/v2/pokemon-species/')
       .then(resp => resp.json())
       .then(json => json.results)
+      .then(results => results.sort((a, b) => a.name > b.name))
   }
   async componentDidMount () {
     return this.getPokemonList()
@@ -109,29 +110,73 @@ class PokemonSearchBar extends Component {
 }
 
 class PokemonDisplay extends Component {
-  async getSpeciesData (name) {
-    await this.clearPokemonData()
-    // get the pokemon-species data
-    const pokemonSpeciesEndpoint = `${this.props.baseurl}/api/v2/pokemon-species/${name}/`
-    return window.fetch(pokemonSpeciesEndpoint)
+  constructor (props) {
+    super(props)
+    // initialize stat with a dummy value
+    this.state = {
+      speciesData: {},
+      pokemonData: {},
+      loaded: {
+        species: false,
+        pokemon: false
+      }
+    }
+  }
+  async getPokemonData (name) {
+    // get the pokemon data with this endpoint
+    const endpoint = `https://pokeapi.co/api/v2/pokemon/${name}/`
+    return window.fetch(endpoint)
+      // convert to json before returning
       .then(resp => resp.json())
-      .then(data => this.setState({species: data, speciesLoaded: true}))
+  }
+  async getSpeciesData (name) {
+    // get the pokemon-species data with this endpoint
+    const endpoint = `https://pokeapi.co/api/v2/pokemon-species/${name}/`
+    return window.fetch(endpoint)
+      // convert to json before returning
+      .then(resp => resp.json())
+  }
+  async componentDidMount () {
+    // get the species data
+    const speciesData = await this.getSpeciesData('rayquaza')
+    // get the pokemon data of the default variant of this species
+    const baseVariant = speciesData.varieties.find(item => item.is_default).pokemon.name
+    const pokemonData = await this.getPokemonData(baseVariant)
+    // set the state with this data
+    this.setState({
+      speciesData: speciesData,
+      pokemonData: pokemonData,
+      loaded: {
+        species: true,
+        pokemon: true
+      }
+    })
   }
   render () {
-    return (
-      <RG.Row>
-        <RG.Col span='3'>
-          <RG.Image />
-        </RG.Col>
-      </RG.Row>
-    )
+    if (this.state.loaded.species && this.state.loaded.pokemon) {
+      const species = this.state.speciesData
+      const pokemon = this.state.pokemonData
+      return (
+        <RG.Row>
+          <RG.Col span='3'>
+            <RG.Image src={pokemon.sprites.front_default} />
+          </RG.Col>
+        </RG.Row>
+      )
+    } else {
+      return (
+        <RG.Centered>
+          <LoadingSpinner />
+        </RG.Centered>
+      )
+    }
   }
 }
 
 const PokemonResultsList = (props) => (
   <PokemonList>
-    {props.list.map((item) => (
-      <PokemonListItem>{item.name}</PokemonListItem>
+    {props.list.map((item, i) => (
+      <PokemonListItem key={i}>{item.name}</PokemonListItem>
     ))}
   </PokemonList>
 )

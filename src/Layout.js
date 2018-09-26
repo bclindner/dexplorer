@@ -10,6 +10,16 @@ RG.Row = styled.div`
   }
 `
 
+RG.Centered = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 RG.Col = styled.div`
   flex: ${props => props.span * 8.33}%;
 `

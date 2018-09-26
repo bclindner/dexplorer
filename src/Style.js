@@ -10,7 +10,7 @@ const spin = keyframes`
   60% {
     transform: rotate(355deg);
   }
-  100% {
+  80%, 100% {
     transform: rotate(360deg);
   }
 `
@@ -28,10 +28,11 @@ export const Wrapper = styled.div`
   width: 80%;
   max-width: 1280px;
   min-width: 800px;
+  max-height: 1080px;
+  height: 800px;
 `
 export const Sidebar = styled.aside`
   background-color: #1d1f21;
-  border-right: 1px solid black;
 `
 
 export const SearchBar = styled.input`
