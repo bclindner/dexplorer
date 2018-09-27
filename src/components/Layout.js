@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { injectGlobal } from 'styled-components'
 
 // neat little flexbox responsive grid
 export const RG = {}
@@ -17,6 +17,14 @@ export const Wrapper = styled.div`
     min-width: auto;
   }
 
+`
+
+export const BodyStyles = injectGlobal`
+  body {
+    margin: 0 auto;
+    width: 100%;
+    background-color: #111314;
+  }
 `
 
 // not necessarily a 'row' - i use this at least once to display two rows
@@ -46,7 +54,6 @@ RG.Col = styled.div`
 RG.Image = styled.img`
   box-sizing: border-box;
   width: 100%;
-  padding: 1em;
 `
 
 RG.Table = styled.table`
