@@ -48,3 +48,8 @@ RG.Image = styled.img`
   width: 100%;
   padding: 1em;
 `
+
+RG.Table = styled.table`
+  width: 100%;
+  text-align: left;
+`

@@ -8,5 +8,12 @@ Info.Container = styled.div`
   height: 100%;
   width: 100%;
 `
+Info.Card = styled.div`
+  padding: 1em;
+  @media only screen and (max-width: 800px) {
+    text-align: center;
+  }
+
+`
 
 export default Info

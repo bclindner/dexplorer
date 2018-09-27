@@ -24,7 +24,7 @@ Sidebar.List = styled.ul`
   padding-left: 0;
   margin-top: 0;
   overflow-y: scroll;
-  max-height: 1000px;
+  max-height: 800px;
 `
 
 Sidebar.ListItem = styled.li`
