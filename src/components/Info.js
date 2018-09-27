@@ -78,9 +78,11 @@ export const StatBar = (props) => (
 )
 
 export const ImageCard = (props) => (
-  <Card>
-    <RG.Image src='https://cdn.bulbagarden.net/upload/thumb/e/e4/384Rayquaza.png/250px-384Rayquaza.png' />
-  </Card>
+  <RG.Centered>
+    <Card>
+        <RG.Image src='https://cdn.bulbagarden.net/upload/thumb/e/e4/384Rayquaza.png/250px-384Rayquaza.png' />
+    </Card>
+  </RG.Centered>
 )
 
 export const NameCard = (props) => (
