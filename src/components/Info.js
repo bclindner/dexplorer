@@ -10,6 +10,7 @@ export const Container = styled.div`
   height: 100%;
   width: 100%;
 `
+
 export const Card = styled.div`
   padding: 1em;
   @media only screen and (max-width: 800px) {
@@ -17,6 +18,7 @@ export const Card = styled.div`
   }
 
 `
+
 export const InfoDisplay = (props) => (
   <Container>
     <RG.Row>
@@ -80,7 +82,7 @@ export const StatBar = (props) => (
 export const ImageCard = (props) => (
   <RG.Centered>
     <Card>
-        <RG.Image src='https://cdn.bulbagarden.net/upload/thumb/e/e4/384Rayquaza.png/250px-384Rayquaza.png' />
+      <RG.Image src='https://cdn.bulbagarden.net/upload/thumb/e/e4/384Rayquaza.png/250px-384Rayquaza.png' />
     </Card>
   </RG.Centered>
 )

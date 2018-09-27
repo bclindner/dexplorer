@@ -38,7 +38,7 @@ export const ListItem = styled.li`
   }
 `
 
-export const StyledLink = styled(Link)`
+export const ListLink = styled(Link)`
   &:link, &:visited {
     text-decoration: none;
     color: #d4d8db;
@@ -48,9 +48,9 @@ export const Sidebar = (props) => (
   <Container>
     <SearchBar placeholder='Search by name...' />
     <List>
-      <StyledLink to='bulbasaur'>
+      <ListLink to='bulbasaur'>
         <ListItem>Bulbasaur</ListItem>
-      </StyledLink>
+      </ListLink>
       <ListItem>Bulbasaur</ListItem>
       <ListItem>Bulbasaur</ListItem>
       <ListItem>Bulbasaur</ListItem>
