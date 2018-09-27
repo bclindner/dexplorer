@@ -1,5 +1,6 @@
+import React from 'react'
 import styled, { keyframes } from 'styled-components'
-
+import { RG } from './Layout.js'
 const spin = keyframes`
   0% {
     transform: rotate(0deg);
@@ -15,7 +16,6 @@ const spin = keyframes`
   }
 `
 
-
 export const LoadingSpinner = styled.div`
   height: 100px;
   width: 100px;
@@ -27,3 +27,8 @@ export const LoadingSpinner = styled.div`
   margin: 1em;
 `
 
+export const CenteredSpinner = () => (
+  <RG.Centered>
+    <LoadingSpinner />
+  </RG.Centered>
+)

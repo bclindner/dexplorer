@@ -19,7 +19,7 @@ export async function getSpeciesList () {
   const endpoint = `${baseURL}/pokemon-species/`
   // make the request
   return fetchJSON(endpoint)
-    // for the purposes of the app, only the results are relevant
+    // for the purposes of most apps, only the results are relevant
     .then(data => data.results)
 }
 

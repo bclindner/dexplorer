@@ -183,9 +183,11 @@ export const MoveCard = (props) => (
     <h2>Moveset</h2>
     <RG.Table>
       <thead>
-        <th>Level</th>
-        <th>Move</th>
-        <th>Learned By</th>
+        <tr>
+          <th>Level</th>
+          <th>Move</th>
+          <th>Learned By</th>
+        </tr>
       </thead>
       <tbody>
         <tr>
