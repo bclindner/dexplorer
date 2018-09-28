@@ -298,6 +298,10 @@ export const MiscCard = (props) => (
       {props.species.base_happiness}
     </p>
     <p>
+      <b>Base Experience</b>&nbsp;
+      {props.species.base_experience}
+    </p>
+    <p>
       <b>Gender Ratio</b> {props.species.gender_rate === -1
         ? 'Genderless'
         : (1 - props.species.gender_rate / 8) * 100 + '% male to ' + (props.species.gender_rate / 8 * 100) + '% female'
@@ -461,7 +465,9 @@ export class InfoDisplayContainer extends Component {
 export const InfoDisplayWelcome = () => (
   <Container>
     <RG.Centered>
-      <h3>Welcome! Select a Pokemon from the list to begin.</h3>
+      <Card>
+        <h3>Welcome! Select a Pokemon from the list to begin.</h3>
+      </Card>
     </RG.Centered>
   </Container>
 )
