@@ -48,6 +48,14 @@ RG.Row = styled.div`
 `
 
 /**
+ * A Flexbox 'row'. Non-responsive.
+ */
+RG.StaticRow = styled.div`
+  display: flex;
+  flex-flow: nowrap;
+`
+
+/**
  * Helper component for displaying horizontally and vertically centered elements inside of a div.
  */
 RG.Centered = styled.div`
@@ -85,14 +93,4 @@ RG.Image = styled.img`
 RG.Table = styled.table`
   width: 100%;
   text-align: left;
-`
-
-RG.ScrollableTHead = styled.thead`
-  display: block;
-`
-
-RG.ScrollableTBody = styled.tbody`
-  overflow-y: scroll;
-  max-height: 250px;
-  display: block;
 `

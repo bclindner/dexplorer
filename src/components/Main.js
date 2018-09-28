@@ -4,7 +4,7 @@ import { Header } from './Header.js'
 import { Footer } from './Footer.js'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PokemonSidebar } from './Sidebar.js'
-import { TestComponent } from './Info.js'
+import { InfoDisplayContainer } from './Info.js'
 const Main = () => (
   <BrowserRouter>
     <Wrapper>
@@ -19,7 +19,7 @@ const Main = () => (
         </RG.Col>
         <RG.Col span='8'>
           <Switch>
-            <Route path='/:speciesName' component={TestComponent} />
+            <Route path='/:speciesName' component={InfoDisplayContainer} />
           </Switch>
         </RG.Col>
       </RG.Row>
