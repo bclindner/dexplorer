@@ -28,7 +28,7 @@ export async function getSpeciesList () {
  * @param speciesName The name (or ID) of the species to get.
  */
 export async function getSpecies (speciesName) {
-  const endpoint = `${baseURL}/pokemon-species/${speciesName}`
+  const endpoint = `${baseURL}/pokemon-species/${speciesName}/`
   return fetchJSON(endpoint)
 }
 
@@ -37,6 +37,6 @@ export async function getSpecies (speciesName) {
  * @param pokemonName The name (or ID) of the Pokemon to get.
  */
 export async function getPokemon (pokemonName) {
-  const endpoint = `${baseURL}/pokemon/${pokemonName}`
+  const endpoint = `${baseURL}/pokemon/${pokemonName}/`
   return fetchJSON(endpoint)
 }

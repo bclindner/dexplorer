@@ -1,9 +1,9 @@
-import React from 'react'
+import React , { Component } from 'react'
 import styled from 'styled-components'
 import { RG } from './Layout.js'
+import { getSpecies, getPokemon } from '../utils/PokeAPI.js'
+import { PokeballSpinner } from './LoadingSpinner.js'
 import colors from '../utils/colors.js'
-
-const Info = {}
 
 /**
  * Container for the info display.
@@ -280,5 +280,83 @@ export const InfoDisplay = (props) => (
     </RG.Row>
   </Container>
 )
-
-export default Info
+export class TestComponent extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      loaded: false,
+      speciesName: '',
+      pokemonName: '',
+      pokemonData: {},
+      speciesData: {}
+    }
+  }
+  // restrict updating since we put a hook to refetch on componentWillUpdate
+  async shouldComponentUpdate (newProps, newState) {
+    return newState.speciesName === newProps.match.params.speciesName
+  }
+  async updateData () {
+    // get the species data first
+    // unfortunately pokemon data can't be fetched in parallel because
+    // species name !== the default variant name. see: deoxys, aegislash, etc
+    const speciesName = this.props.match.params.speciesName
+    try {
+      const speciesData = await getSpecies(speciesName)
+      // get the default variant out of speciesData
+      const defaultVariant = speciesData.varieties.find(variant => variant.is_default).pokemon.name
+      // get the pokemon data for the default variant
+      const pokemonData = await getPokemon(defaultVariant)
+      // set our state accordingly
+      this.setState({
+        error: '',
+        speciesName: speciesName,
+        pokemonName: defaultVariant,
+        pokemonData: pokemonData,
+        speciesData: speciesData
+      })
+    }
+    catch(err) {
+      this.setState({
+        error: 'something went wrong, sorry!',
+        speciesName: speciesName
+      })
+    }
+  }
+  // run the update when the component mounts (in the event the page is accessed with a pokemon already in URL)
+  async componentDidMount () {
+    return this.updateData()
+  }
+  // run the update when the component updates (which happens whenever the location changes) AND when the data already fetched does not appear to match the new URL
+  async componentDidUpdate () {
+    if (this.state.speciesName !== this.props.match.params.speciesName) {
+      return this.updateData()
+    }
+  }
+  render() {
+    if ('name' in this.state.pokemonData && this.state.speciesName === this.props.match.params.speciesName) {
+      return (
+        <Container>
+          <RG.Centered>
+            <h1>{this.state.pokemonData.name}</h1>
+          </RG.Centered>
+        </Container>
+      )
+    } else if (this.state.error) {
+      return (
+        <Container>
+          <RG.Centered>
+            <h1>{this.state.error}</h1>
+          </RG.Centered>
+        </Container>
+      )
+    } else {
+      return (
+        <Container>
+          <RG.Centered>
+            <PokeballSpinner />
+          </RG.Centered>
+        </Container>
+      )
+    }
+  }
+}

@@ -2,9 +2,9 @@ import React from 'react'
 import { RG, Wrapper } from './Layout.js'
 import { Header } from './Header.js'
 import { Footer } from './Footer.js'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PokemonSidebar } from './Sidebar.js'
-import { InfoDisplay } from './Info.js'
+import { TestComponent } from './Info.js'
 const Main = () => (
   <BrowserRouter>
     <Wrapper>
@@ -18,7 +18,9 @@ const Main = () => (
           <PokemonSidebar />
         </RG.Col>
         <RG.Col span='8'>
-          <InfoDisplay />
+          <Switch>
+            <Route path='/:speciesName' component={TestComponent} />
+          </Switch>
         </RG.Col>
       </RG.Row>
       <RG.Row>
