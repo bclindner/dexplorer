@@ -79,7 +79,7 @@ export const StatBar = (props) => (
 export const ImageCard = (props) => (
   <RG.Centered>
     <Card>
-      <RG.Image src='https://cdn.bulbagarden.net/upload/thumb/e/e4/384Rayquaza.png/250px-384Rayquaza.png' />
+      <RG.Image src={props.url} />
     </Card>
   </RG.Centered>
 )
@@ -89,12 +89,16 @@ export const ImageCard = (props) => (
  */
 export const NameCard = (props) => (
   <Card>
-    <small>#394</small>
-    <h1>Rayquaza</h1>
-    <small>Flying / Dragon</small>
-    <p>Abilities: Air-Lock</p>
-    <p>Height: 1m</p>
-    <p>Weight: 200kg</p>
+    <small>#{props.species.pokedex_numbers.find(p => p.pokedex.name === 'national').entry_number}</small>
+    <h1>{props.pokemon.name}</h1>
+    <p>Abilities:&nbsp;
+      {props.pokemon.abilities.length > 1
+        ? (props.pokemon.abilities[0].ability.name + ' / ' + props.pokemon.abilities[1].ability.name)
+        : (props.pokemon.abilities[0].ability.name)
+      }
+    </p>
+    <p>Height: {props.pokemon.height / 10}m</p>
+    <p>Weight: {props.pokemon.weight / 10}kg</p>
   </Card>
 )
 
@@ -108,27 +112,51 @@ export const StatCard = (props) => (
       <tbody>
         <tr>
           <td>HP</td>
-          <StatBar label='15' percent='2.9' color={colors.stat.hp} />
+          <StatBar
+            label={props.stats.find(x => x.stat.name === 'hp').base_stat}
+            percent={props.stats.find(x => x.stat.name === 'hp').base_stat / 255 * 100}
+            color={colors.stat.hp}
+          />
         </tr>
         <tr>
           <td>Attack</td>
-          <StatBar label='255' percent='40' color={colors.stat.atk} />
+          <StatBar
+            label={props.stats.find(x => x.stat.name === 'attack').base_stat}
+            percent={props.stats.find(x => x.stat.name === 'attack').base_stat / 255 * 100}
+            color={colors.stat.atk}
+          />
         </tr>
         <tr>
           <td>Defense</td>
-          <StatBar label='255' percent='50' color={colors.stat.def} />
+          <StatBar
+            label={props.stats.find(x => x.stat.name === 'defense').base_stat}
+            percent={props.stats.find(x => x.stat.name === 'defense').base_stat / 255 * 100}
+            color={colors.stat.def}
+          />
         </tr>
         <tr>
           <td>Sp.Atk.</td>
-          <StatBar label='255' percent='50' color={colors.stat.spatk} />
+          <StatBar
+            label={props.stats.find(x => x.stat.name === 'special-attack').base_stat}
+            percent={props.stats.find(x => x.stat.name === 'special-attack').base_stat / 255 * 100}
+            color={colors.stat.spatk}
+          />
         </tr>
         <tr>
           <td>Sp.Def.</td>
-          <StatBar label='255' percent='50' color={colors.stat.spdef} />
+          <StatBar
+            label={props.stats.find(x => x.stat.name === 'special-defense').base_stat}
+            percent={props.stats.find(x => x.stat.name === 'special-defense').base_stat / 255 * 100}
+            color={colors.stat.spdef}
+          />
         </tr>
         <tr>
           <td>Speed</td>
-          <StatBar label='255' percent='50' color={colors.stat.speed} />
+          <StatBar
+            label={props.stats.find(x => x.stat.name === 'speed').base_stat}
+            percent={props.stats.find(x => x.stat.name === 'speed').base_stat / 255 * 100}
+            color={colors.stat.speed}
+          />
         </tr>
       </tbody>
     </table>
@@ -145,19 +173,19 @@ export const EVCard = (props) => (
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.hp}>
           HP<br />
-          0
+          {props.stats.find(x => x.stat.name === 'hp').effort}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.atk}>
           Atk<br />
-          0
+          {props.stats.find(x => x.stat.name === 'attack').effort}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.def}>
           Def<br />
-          0
+          {props.stats.find(x => x.stat.name === 'defense').effort}
         </EVDisplay>
       </RG.Col>
     </RG.Row>
@@ -165,19 +193,19 @@ export const EVCard = (props) => (
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.spatk}>
           Sp.Atk.<br />
-          0
+          {props.stats.find(x => x.stat.name === 'special-attack').effort}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.spdef}>
           Sp.Def.<br />
-          0
+          {props.stats.find(x => x.stat.name === 'special-defense').effort}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.speed}>
           Speed<br />
-          0
+          {props.stats.find(x => x.stat.name === 'speed').effort}
         </EVDisplay>
       </RG.Col>
     </RG.Row>
@@ -191,40 +219,22 @@ export const MoveCard = (props) => (
   <Card>
     <h2>Moveset</h2>
     <RG.Table>
-      <thead>
+      <RG.ScrollableTHead>
         <tr>
           <th>Level</th>
           <th>Move</th>
           <th>Learned By</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Tackle</td>
-          <td>Level-Up</td>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>Tackle</td>
-          <td>Level-Up</td>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>Tackle</td>
-          <td>Level-Up</td>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>Tackle</td>
-          <td>Level-Up</td>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>Tackle</td>
-          <td>Level-Up</td>
-        </tr>
-      </tbody>
+      </RG.ScrollableTHead>
+      <RG.ScrollableTBody>
+        {props.moves.map(move => (
+          <tr>
+            <td>{move.version_group_details[0].level_learned_at || '-' }</td>
+            <td>{move.move.name}</td>
+            <td>{move.version_group_details[0].move_learn_method.name}</td>
+          </tr>
+        ))}
+      </RG.ScrollableTBody>
     </RG.Table>
   </Card>
 )
@@ -235,16 +245,20 @@ export const MiscCard = (props) => (
   <Card>
     <h2>Other Info</h2>
     <p>
-      <b>Egg Group</b> Undiscovered
+      <b>Egg Group</b>&nbsp;
+      {props.species.egg_groups.length > 1
+        ? (props.species.egg_groups[0].name + ' / ' + props.species.egg_groups[1].name)
+        : (props.species.egg_groups[0].name)
+      }
     </p>
     <p>
-      <b>Catch Rate</b> 45
+      <b>Catch Rate</b> {props.species.capture_rate}
     </p>
     <p>
-      <b>Growth Rate</b> Medium-Slow
+      <b>Growth Rate</b> {props.species.growth_rate.name}
     </p>
     <p>
-      <b>Base Friendship</b> 0
+      <b>Base Happiness</b> {props.species.base_happiness}
     </p>
   </Card>
 
@@ -256,26 +270,26 @@ export const InfoDisplay = (props) => (
   <Container>
     <RG.Row>
       <RG.Col span='4'>
-        <ImageCard />
+        <ImageCard url={props.pokemon.sprites.front_default} />
       </RG.Col>
       <RG.Col span='8'>
-        <NameCard />
+        <NameCard pokemon={props.pokemon} species={props.species} />
       </RG.Col>
     </RG.Row>
     <RG.Row>
       <RG.Col span='6'>
-        <StatCard />
+        <StatCard stats={props.pokemon.stats} />
       </RG.Col>
       <RG.Col span='6'>
-        <EVCard />
+        <EVCard stats={props.pokemon.stats} />
       </RG.Col>
     </RG.Row>
     <RG.Row>
       <RG.Col span='6'>
-        <MoveCard />
+        <MoveCard moves={props.pokemon.moves}/>
       </RG.Col>
       <RG.Col span='6'>
-        <MiscCard />
+        <MiscCard pokemon={props.pokemon} species={props.species} />
       </RG.Col>
     </RG.Row>
   </Container>
@@ -335,11 +349,10 @@ export class TestComponent extends Component {
   render() {
     if ('name' in this.state.pokemonData && this.state.speciesName === this.props.match.params.speciesName) {
       return (
-        <Container>
-          <RG.Centered>
-            <h1>{this.state.pokemonData.name}</h1>
-          </RG.Centered>
-        </Container>
+        <InfoDisplay
+          pokemon={this.state.pokemonData}
+          species={this.state.speciesData}
+        />
       )
     } else if (this.state.error) {
       return (

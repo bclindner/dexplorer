@@ -86,3 +86,13 @@ RG.Table = styled.table`
   width: 100%;
   text-align: left;
 `
+
+RG.ScrollableTHead = styled.thead`
+  display: block;
+`
+
+RG.ScrollableTBody = styled.tbody`
+  overflow-y: scroll;
+  max-height: 250px;
+  display: block;
+`
