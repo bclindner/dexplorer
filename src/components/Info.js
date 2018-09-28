@@ -90,7 +90,7 @@ export const ImageCard = (props) => (
 export const NameCard = (props) => (
   <Card>
     <small>#{props.species.pokedex_numbers.find(p => p.pokedex.name === 'national').entry_number}</small>
-    <h1>{props.pokemon.name}</h1>
+    <h1>{props.species.names.find(name => name.language.name === 'en').name}</h1>
     <p>Abilities:&nbsp;
       {props.pokemon.abilities.length > 1
         ? (props.pokemon.abilities[0].ability.name + ' / ' + props.pokemon.abilities[1].ability.name)
