@@ -58,14 +58,15 @@ export class PokemonSidebar extends Component {
     // initialize state values
     this.state = {
       speciesList: [],
-      speciesListFiltered: []
+      speciesListFiltered: [],
+      searchTerm: ''
     }
     // bind the handleSearch function so it can be used in the search bar
     this.handleSearch = this.handleSearch.bind(this)
   }
   async componentWillMount () {
     getSpeciesList()
-      // sort the list
+      // sort the list alphabetically
       .then(list => list.sort((a, b) => a.name > b.name))
       // add pretty names to the list
       .then(list => list.map((species) => {
@@ -85,14 +86,24 @@ export class PokemonSidebar extends Component {
       }))
   }
   async filterList (name) {
+    // take the raw species list and get every entry that contains the given name
+    // this is quite laggy; is there a faster way i don't know about?
     return this.state.speciesList.filter(species => species.name.includes(name))
   }
   async handleSearch (e) {
-    this.filterList(e.target.value)
-      .then(filteredList => this.setState({ speciesListFiltered: filteredList }))
+    // get the search term from the event,
+    // then convert it to lowercase (the PokeAPI names are lowercase so it has to match)
+    const searchTerm = e.target.value.toLowerCase()
+    // execute a filter
+    this.filterList(searchTerm)
+      // set the state accordingly
+      .then(filteredList => this.setState({
+        speciesListFiltered: filteredList,
+        searchTerm: searchTerm
+      }))
   }
   render () {
-    if (this.state.speciesListFiltered.length > 0) {
+    if (this.state.speciesList.length && this.state.speciesListFiltered.length) {
       const list = this.state.speciesListFiltered
       return (
         <Container>
@@ -109,7 +120,7 @@ export class PokemonSidebar extends Component {
     } else {
       return (
         <Container>
-          <SearchBar placeholder='Search by name...' onChange={this.handleSearch} />
+          <SearchBar placeholder='Search by name...' value={this.state.searchTerm} onChange={this.handleSearch} />
           <CenteredSpinner />
         </Container>
       )
