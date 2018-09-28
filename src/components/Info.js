@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { RG } from './Layout.js'
+import colors from '../utils/colors.js'
 
 const Info = {}
 
 export const Container = styled.div`
-  background-color: #2d2f31;
-  color: #d4d8db;
+  background-color: ${colors.dark};
+  color: ${colors.light};
   height: 100%;
   width: 100%;
 `
@@ -20,8 +21,8 @@ export const Card = styled.div`
 `
 
 const EVDisplay = styled.div`
-  background-color: ${props => props.color ? props.color : '#FF5959'};
-  color: #1d1f21;
+  background-color: ${props => props.color ? props.color : colors.light};
+  color: ${colors.darker};
   margin: 0.5em;
   padding: 0.5em;
   text-align: center;
@@ -34,7 +35,7 @@ const Outer = styled.td`
   position: relative;
   width: 100%;
   height: 1.25em;
-  background-color: black;
+  background-color: ${colors.darker};
 `
 /**
  * Stat bar inner portion.
@@ -45,11 +46,11 @@ const Inner = styled.div`
   /* invert the color if the percentage is too low to display the stat inside the bar
    * so that it can still be viewed
    */
-  color: ${props => props.percent < 3 ? 'white' : 'black'};
+  color: ${props => props.percent < 3 ? colors.light : colors.darker};
   text-align: right;
   padding-right: ${props => props.percent < 5 ? 0.75 : 0.25};
   width: ${props => props.percent}%;
-  background-color: ${props => props.color ? props.color : '#4286f4'};
+  background-color: ${props => props.color ? props.color : colors.light};
 `
 /**
  * Simple stat bar component.
@@ -97,27 +98,27 @@ export const StatCard = (props) => (
       <tbody>
         <tr>
           <td>HP</td>
-          <StatBar label='15' percent='2.9' color='#FF5959' />
+          <StatBar label='15' percent='2.9' color={colors.stat.hp} />
         </tr>
         <tr>
           <td>Attack</td>
-          <StatBar label='255' percent='40' color='#F5AC78' />
+          <StatBar label='255' percent='40' color={colors.stat.atk} />
         </tr>
         <tr>
           <td>Defense</td>
-          <StatBar label='255' percent='50' color='#FAE078' />
+          <StatBar label='255' percent='50' color={colors.stat.def} />
         </tr>
         <tr>
           <td>Sp.Atk.</td>
-          <StatBar label='255' percent='50' color='#9DB7F5' />
+          <StatBar label='255' percent='50' color={colors.stat.spatk} />
         </tr>
         <tr>
           <td>Sp.Def.</td>
-          <StatBar label='255' percent='50' color='#A7DB8D' />
+          <StatBar label='255' percent='50' color={colors.stat.spdef} />
         </tr>
         <tr>
           <td>Speed</td>
-          <StatBar label='255' percent='50' color='#FA92B2' />
+          <StatBar label='255' percent='50' color={colors.stat.speed} />
         </tr>
       </tbody>
     </table>
@@ -132,19 +133,19 @@ export const EVCard = (props) => (
     <h2>Effort Values</h2>
     <RG.Row>
       <RG.Col span='4'>
-        <EVDisplay color='#FF5959'>
+        <EVDisplay color={colors.stat.hp}>
           HP<br />
           0
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
-        <EVDisplay color='#F5AC78'>
+        <EVDisplay color={colors.stat.atk}>
           Atk<br />
           0
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
-        <EVDisplay color='#FAE078'>
+        <EVDisplay color={colors.stat.def}>
           Def<br />
           0
         </EVDisplay>
@@ -152,19 +153,19 @@ export const EVCard = (props) => (
     </RG.Row>
     <RG.Row>
       <RG.Col span='4'>
-        <EVDisplay color='#9DB7F5'>
+        <EVDisplay color={colors.stat.spatk}>
           Sp.Atk.<br />
           0
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
-        <EVDisplay color='#A7DB8D'>
+        <EVDisplay color={colors.stat.spdef}>
           Sp.Def.<br />
           0
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
-        <EVDisplay color='#FA92B2'>
+        <EVDisplay color={colors.stat.speed}>
           Speed<br />
           0
         </EVDisplay>

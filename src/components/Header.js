@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 import React from 'react'
+import colors from '../utils/colors.js'
 
 export const HeaderContainer = styled.header`
   box-sizing: border-box;
   padding: 1px 1em;
-  background-color: #2d2f31;
-  color: #d4d8db;
+  background-color: ${colors.dark};
+  color: ${colors.light};
 `
 export const Header = () => (
   <HeaderContainer>

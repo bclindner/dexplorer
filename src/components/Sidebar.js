@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
-import { getSpeciesList } from '../PokeAPI.js'
+import { getSpeciesList } from '../utils/PokeAPI.js'
 import { PokeballSpinner } from './LoadingSpinner.js'
 import { RG } from './Layout.js'
+import colors from '../utils/colors.js'
 /**
  * Styled sidebar container.
  */
 export const Container = styled.aside`
-  background-color: #1d1f21;
+  background-color: ${colors.darker};
   width: 100%;
   height: 100%;
 `
@@ -20,8 +21,8 @@ export const SearchBar = styled.input`
   padding: 1em;
   box-sizing: border-box;
   width: 100%;
-  background-color: #2d2f31;
-  color: #eee;
+  background-color: ${colors.dark};
+  color: ${colors.light};
   border: none;
   border-radius: 0;'
 `
@@ -54,16 +55,16 @@ export const ListLink = styled(NavLink)`
   display: block;
   &:link, &:visited {
     text-decoration: none;
-    color: #d4d8db;
+    color: ${colors.light};
   }
   &.activeLink {
-    background-color: crimson;
+    background-color: ${colors.accent};
     &:hover {
-      background-color: #ff1645;
+      background-color: ${colors.accentLight};
     }
   }
   &:hover {
-    background-color: #2d2f31;
+    background-color: ${colors.dark};
   }
 `
 
