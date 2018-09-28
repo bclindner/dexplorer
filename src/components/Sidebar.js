@@ -35,8 +35,10 @@ export const List = styled.ul`
   padding-left: 0;
   margin: 0;
   overflow-y: scroll;
-  height: 800px;
-  max-height: 800px;
+  height: 875px;
+  @media only screen and (max-width: 800px) {
+    max-height: 300px;
+  }
 `
 
 /**
