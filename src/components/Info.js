@@ -92,9 +92,9 @@ export const StatBar = (props) => (
  */
 export const ImageCard = (props) => (
   <div>
-  <RG.Centered>
-    <RG.Image src={props.url} />
-  </RG.Centered>
+    <RG.Centered>
+      <RG.Image src={props.url} />
+    </RG.Centered>
   </div>
 )
 
@@ -239,11 +239,11 @@ export const EVCard = (props) => (
 export const MoveCard = (props) => (
   <Card>
     <h2>Moveset</h2>
-  <RG.Select onChange={props.handleGroupChange}>
-    {props.groups.map((group, i) => (
-      <option value={group} key={i}>{group}</option>
-    ))}
-  </RG.Select>
+    <RG.Select onChange={props.handleGroupChange}>
+      {props.groups.map((group, i) => (
+        <option value={group} key={i}>{group}</option>
+      ))}
+    </RG.Select>
     <RG.StaticRow>
       <RG.Col span='2'><strong>Lv.</strong></RG.Col>
       <RG.Col span='5'><strong>Move</strong></RG.Col>
@@ -273,36 +273,36 @@ export const MoveCard = (props) => (
  */
 export const MiscCard = (props) => (
   <Card>
-      <h2>Other Info</h2>
-      <p>
-        <Capitalize>
+    <h2>Other Info</h2>
+    <p>
+      <Capitalize>
         <b>Egg Group</b>&nbsp;
         {props.species.egg_groups.length > 1
           ? (props.species.egg_groups[0].name + ' / ' + props.species.egg_groups[1].name)
           : (props.species.egg_groups[0].name)
         }
-        </Capitalize>
-      </p>
-      <p>
-        <b>Catch Rate</b>&nbsp;
-        {props.species.capture_rate}
-      </p>
-      <p>
-        <b>Growth Rate</b>&nbsp;
-        <Capitalize>
-          {props.species.growth_rate.name}
-        </Capitalize>
-      </p>
-      <p>
-          <b>Base Happiness</b>&nbsp;
-          {props.species.base_happiness}
-      </p>
-      <p>
-        <b>Gender Ratio</b> {props.species.gender_rate === -1
-            ? 'Genderless'
-            : (1 - props.species.gender_rate / 8) * 100 + '% male to ' + (props.species.gender_rate / 8 * 100) + '% female'
-        }
-      </p>
+      </Capitalize>
+    </p>
+    <p>
+      <b>Catch Rate</b>&nbsp;
+      {props.species.capture_rate}
+    </p>
+    <p>
+      <b>Growth Rate</b>&nbsp;
+      <Capitalize>
+        {props.species.growth_rate.name}
+      </Capitalize>
+    </p>
+    <p>
+      <b>Base Happiness</b>&nbsp;
+      {props.species.base_happiness}
+    </p>
+    <p>
+      <b>Gender Ratio</b> {props.species.gender_rate === -1
+        ? 'Genderless'
+        : (1 - props.species.gender_rate / 8) * 100 + '% male to ' + (props.species.gender_rate / 8 * 100) + '% female'
+      }
+    </p>
   </Card>
 
 )
@@ -361,12 +361,14 @@ export class InfoDisplayContainer extends Component {
     // get the moves from the first version group
     let moves = this.state.pokemonData.moves.filter(move => {
       const vgroups = move.version_group_details
-      if(vgroups.find(vgroup => vgroup.version_group.name === group)) {
+      if (vgroups.find(vgroup => vgroup.version_group.name === group)) {
         return true
       } else {
         return false
       }
     })
+    // sort moves by name
+    moves = moves.sort((a, b) => a.move.name > b.move.name)
     // set the moves state accordingly
     this.setState({moves: moves})
   }
@@ -404,8 +406,8 @@ export class InfoDisplayContainer extends Component {
         pokemonName: defaultVariant,
         pokemonData: pokemonData,
         speciesData: speciesData,
-        versionGroups: groups,
-      }, () => {this.filterGroups(groups[0])})
+        versionGroups: groups
+      }, () => { this.filterGroups(groups[0]) })
     } catch (err) {
       console.log(err)
       this.setState({
@@ -456,3 +458,10 @@ export class InfoDisplayContainer extends Component {
     }
   }
 }
+export const InfoDisplayWelcome = () => (
+  <Container>
+    <RG.Centered>
+      <h3>Welcome! Select a Pokemon from the list to begin.</h3>
+    </RG.Centered>
+  </Container>
+)

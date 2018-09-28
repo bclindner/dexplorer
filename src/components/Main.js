@@ -4,9 +4,9 @@ import { Header } from './Header.js'
 import { Footer } from './Footer.js'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PokemonSidebar } from './Sidebar.js'
-import { InfoDisplayContainer } from './Info.js'
+import { InfoDisplayContainer, InfoDisplayWelcome } from './Info.js'
 const Main = () => (
-  <BrowserRouter basename='/pokedex'>
+  <BrowserRouter>
     <Wrapper>
       <RG.Row>
         <RG.Col span='12'>
@@ -19,7 +19,8 @@ const Main = () => (
         </RG.Col>
         <RG.Col span='8'>
           <Switch>
-            <Route path='/:speciesName' component={InfoDisplayContainer} />
+            <Route exact path={process.env.PUBLIC_URL + '/'} component={InfoDisplayWelcome} />
+            <Route path={process.env.PUBLIC_URL + '/:speciesName'} component={InfoDisplayContainer} />
           </Switch>
         </RG.Col>
       </RG.Row>
