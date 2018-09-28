@@ -87,15 +87,19 @@ export const StatBar = (props) => (
 )
 
 /**
- * Card to display a centered image.
- * Used in the info display here to display the sprite.
+ * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants.
  */
-export const ImageCard = (props) => (
-  <div>
+export const SpriteVariantCard = (props) => (
+  <Card>
     <RG.Centered>
-      <RG.Image src={props.url} />
+      <RG.Image src={props.pokemon.sprites.front_default} />
     </RG.Centered>
-  </div>
+    <RG.Select onChange={props.handleVariantChange}>
+      {props.species.varieties.map((variant, i) => (
+        <option value={variant.pokemon.name} key={i}>{variant.pokemon.name}</option>
+      ))}
+    </RG.Select>
+  </Card>
 )
 
 /**
@@ -105,9 +109,9 @@ export const NameCard = (props) => (
   <Card>
     <Capitalize>
       <small>#{props.species.pokedex_numbers.length > 0
-          ? props.species.pokedex_numbers.find(p => p.pokedex.name === 'national').entry_number
-          : '???'
-        }
+        ? props.species.pokedex_numbers.find(p => p.pokedex.name === 'national').entry_number
+        : '???'
+      }
       </small>
       <h1>{props.species.names.find(name => name.language.name === 'en').name}</h1>
       <p>{props.species.genera.find(genus => genus.language.name === 'en').genus}</p>
@@ -321,7 +325,7 @@ export const InfoDisplay = (props) => (
   <Container>
     <RG.Row>
       <RG.Col span='4'>
-        <ImageCard url={props.pokemon.sprites.front_default} />
+        <SpriteVariantCard pokemon={props.pokemon} species={props.species} handleVariantChange={props.handleVariantChange} />
       </RG.Col>
       <RG.Col span='8'>
         <NameCard pokemon={props.pokemon} species={props.species} />
@@ -359,6 +363,7 @@ export class InfoDisplayContainer extends Component {
       moves: []
     }
     // bind functions to be passed to children
+    this.handleVariantChange = this.handleVariantChange.bind(this)
     this.handleGroupChange = this.handleGroupChange.bind(this)
   }
   // restrict updating since we put a hook to refetch on componentWillUpdate
@@ -380,8 +385,33 @@ export class InfoDisplayContainer extends Component {
     // set the moves state accordingly
     this.setState({moves: moves})
   }
+  async changeVariant (variant) {
+    const pokemonData = await getPokemon(variant)
+    // get the version groups from the moveset
+    let groups = []
+    // for each move
+    pokemonData.moves.forEach(move => {
+      // for each version group
+      move.version_group_details.forEach(group => {
+        // check if its name is already in the array
+        if (groups.indexOf(group.version_group.name) === -1) {
+          // if it isn't, add it
+          groups.push(group.version_group.name)
+        }
+      })
+    })
+    this.setState({
+      pokemonName: variant,
+      pokemonData: pokemonData,
+      versionGroups: groups
+    }, () => { this.filterGroups(groups[0]) })
+  }
   handleGroupChange (e) {
     this.filterGroups(e.target.value)
+  }
+  async handleVariantChange (e) {
+    console.log('running?')
+    this.changeVariant(e.target.value)
   }
   async updateData () {
     try {
@@ -443,6 +473,7 @@ export class InfoDisplayContainer extends Component {
           groups={this.state.versionGroups}
           moves={this.state.moves}
           handleGroupChange={this.handleGroupChange}
+          handleVariantChange={this.handleVariantChange}
         />
       )
     } else if (this.state.error) {
