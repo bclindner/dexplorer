@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import { getSpeciesList } from '../PokeAPI.js'
-import { CenteredSpinner } from './LoadingSpinner.js'
-
+import { PokeballSpinner } from './LoadingSpinner.js'
+import { RG } from './Layout.js'
 /**
  * Styled sidebar container.
  */
@@ -125,7 +125,8 @@ export class PokemonSidebar extends Component {
       }))
   }
   render () {
-    if (this.state.speciesList.length && this.state.speciesListFiltered.length) {
+    // this component needs the species list to be populated before rendering
+    if (this.state.speciesList.length) {
       const list = this.state.speciesListFiltered
       return (
         <Container>
@@ -140,10 +141,13 @@ export class PokemonSidebar extends Component {
         </Container>
       )
     } else {
+      // return a PokeballSpinner in the list if the species list isn't done loading
       return (
         <Container>
           <SearchBar placeholder='Search by name...' value={this.state.searchTerm} onChange={this.handleSearch} />
-          <CenteredSpinner />
+          <RG.Centered>
+            <PokeballSpinner />
+          </RG.Centered>
         </Container>
       )
     }

@@ -1,6 +1,11 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { RG } from './Layout.js'
+
+/**
+ * A nice spinning animation.
+ * Best used with ease-out.
+ * Inspired by Discord's loading spinner.
+ */
 const spin = keyframes`
   0% {
     transform: rotate(0deg);
@@ -16,10 +21,13 @@ const spin = keyframes`
   }
 `
 
+/**
+ * Generic loading spinner component that takes an image and spins it with the keyframes above!
+ */
 export const LoadingSpinner = styled.div`
   height: 100px;
   width: 100px;
-  background-image: url('img/pokeball.png');
+  background-image: url(${props => props.url});
   background-size: cover;
   background-repeat: norepeat;
   background-position: center;
@@ -27,8 +35,7 @@ export const LoadingSpinner = styled.div`
   margin: 1em;
 `
 
-export const CenteredSpinner = () => (
-  <RG.Centered>
-    <LoadingSpinner />
-  </RG.Centered>
-)
+/**
+ * LoadingSpinner, but with a Pokeball!
+ */
+export const PokeballSpinner = () => <LoadingSpinner url='img/pokeball.png' />
