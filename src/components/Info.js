@@ -38,7 +38,7 @@ export const Capitalize = styled.span`
  */
 export const ScrollingMoveList = styled.div`
   overflow-y: scroll;
-  max-height: 250px;
+  max-height: 200px;
 `
 
 /**
@@ -91,9 +91,11 @@ export const StatBar = (props) => (
  * Used in the info display here to display the sprite.
  */
 export const ImageCard = (props) => (
+  <div>
   <RG.Centered>
     <RG.Image src={props.url} />
   </RG.Centered>
+  </div>
 )
 
 /**
@@ -237,14 +239,19 @@ export const EVCard = (props) => (
 export const MoveCard = (props) => (
   <Card>
     <h2>Moveset</h2>
+  <RG.Select onChange={props.handleGroupChange}>
+    {props.groups.map(group => (
+      <option value={group}>{group}</option>
+    ))}
+  </RG.Select>
     <RG.StaticRow>
       <RG.Col span='2'><strong>Lv.</strong></RG.Col>
       <RG.Col span='5'><strong>Move</strong></RG.Col>
       <RG.Col span='5'><strong>Learned By</strong></RG.Col>
     </RG.StaticRow>
     <ScrollingMoveList>
-      {props.moves.map(move => (
-        <RG.StaticRow>
+      {props.moves.map((move, i) => (
+        <RG.StaticRow key={i}>
           <RG.Col span='2'>{move.version_group_details[0].level_learned_at || '-' }</RG.Col>
           <RG.Col span='5'>
             <Capitalize>
@@ -311,7 +318,7 @@ export const InfoDisplay = (props) => (
     </RG.Row>
     <RG.Row>
       <RG.Col span='6'>
-        <MoveCard moves={props.pokemon.moves} />
+        <MoveCard moves={props.moves} groups={props.groups} handleGroupChange={props.handleGroupChange} />
       </RG.Col>
       <RG.Col span='6'>
         <MiscCard pokemon={props.pokemon} species={props.species} />
@@ -322,17 +329,56 @@ export const InfoDisplay = (props) => (
 export class InfoDisplayContainer extends Component {
   constructor (props) {
     super(props)
+    // initialize state
     this.state = {
       loaded: false,
       speciesName: '',
       pokemonName: '',
       pokemonData: {},
-      speciesData: {}
+      speciesData: {},
+      versionGroups: [],
+      moves: []
     }
+    // bind functions to be passed to children
+    this.handleGroupChange = this.handleGroupChange.bind(this)
   }
   // restrict updating since we put a hook to refetch on componentWillUpdate
   async shouldComponentUpdate (newProps, newState) {
     return newState.speciesName === newProps.match.params.speciesName
+  }
+  filterGroups (group) {
+    // get the moves from the first version group
+    let moves = this.state.pokemonData.moves.filter(move => {
+      const vgroups = move.version_group_details
+      if(vgroups.find(vgroup => vgroup.version_group.name === group)) {
+        return true
+      } else {
+        return false
+      }
+    })
+    // sort the moves by level, too
+    moves = moves.sort((moveA, moveB) => {
+      // find the moves with the given version group details
+      const groupA = moveA.version_group_details.find(version_group => version_group.version_group.name === group)
+      const groupB = moveB.version_group_details.find(version_group => version_group.version_group.name === group)
+      // sort by level learned, then by learn method
+      if (groupA.level_learned_at < groupB.level_learned_at) {
+        return true
+      } else if (groupA.level_learned_at === groupB.level_learned_at) {
+        if (groupA.move_learn_method.name > groupB.move_learn_method.name) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
+    })
+    // set the moves state accordingly
+    this.setState({moves: moves})
+  }
+  handleGroupChange (e) {
+    this.filterGroups(e.target.value)
   }
   async updateData () {
     try {
@@ -345,15 +391,30 @@ export class InfoDisplayContainer extends Component {
       const defaultVariant = speciesData.varieties.find(variant => variant.is_default).pokemon.name
       // get the pokemon data for the default variant
       const pokemonData = await getPokemon(defaultVariant)
-      // set our state accordingly
+      // get the version groups from the moveset
+      let groups = []
+      // for each move
+      pokemonData.moves.forEach(move => {
+        // for each version group
+        move.version_group_details.forEach(group => {
+          // check if its name is already in the array
+          if (groups.indexOf(group.version_group.name) === -1) {
+            // if it isn't, add it
+            groups.push(group.version_group.name)
+          }
+        })
+      })
+      // set our state accordingly, then trigger an initial group filter
       this.setState({
         error: '',
         speciesName: speciesName,
         pokemonName: defaultVariant,
         pokemonData: pokemonData,
-        speciesData: speciesData
-      })
+        speciesData: speciesData,
+        versionGroups: groups,
+      }, () => {this.filterGroups(groups[0])})
     } catch (err) {
+      console.log(err)
       this.setState({
         error: err,
         speciesName: this.props.match.params.speciesName
@@ -376,6 +437,9 @@ export class InfoDisplayContainer extends Component {
         <InfoDisplay
           pokemon={this.state.pokemonData}
           species={this.state.speciesData}
+          groups={this.state.versionGroups}
+          moves={this.state.moves}
+          handleGroupChange={this.handleGroupChange}
         />
       )
     } else if (this.state.error) {

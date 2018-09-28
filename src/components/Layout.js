@@ -94,3 +94,10 @@ RG.Table = styled.table`
   width: 100%;
   text-align: left;
 `
+
+RG.Select = styled.select`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 1em;
+`
