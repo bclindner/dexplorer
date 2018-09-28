@@ -5,6 +5,9 @@ import colors from '../utils/colors.js'
 
 const Info = {}
 
+/**
+ * Container for the info display.
+ */
 export const Container = styled.div`
   background-color: ${colors.dark};
   color: ${colors.light};
@@ -12,6 +15,9 @@ export const Container = styled.div`
   width: 100%;
 `
 
+/**
+ * Slightly styled div for the info cards.
+ */
 export const Card = styled.div`
   padding: 1em;
   @media only screen and (max-width: 800px) {
@@ -20,6 +26,10 @@ export const Card = styled.div`
 
 `
 
+/**
+ * A div which somewhat mimics the look of Bulbapedia's EV display boxes.
+ * (if it ain't broke...)
+ */
 const EVDisplay = styled.div`
   background-color: ${props => props.color ? props.color : colors.light};
   color: ${colors.darker};
