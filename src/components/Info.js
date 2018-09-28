@@ -104,7 +104,11 @@ export const ImageCard = (props) => (
 export const NameCard = (props) => (
   <Card>
     <Capitalize>
-      <small>#{props.species.pokedex_numbers.find(p => p.pokedex.name === 'national').entry_number}</small>
+      <small>#{props.species.pokedex_numbers.length > 0
+          ? props.species.pokedex_numbers.find(p => p.pokedex.name === 'national').entry_number
+          : '???'
+        }
+      </small>
       <h1>{props.species.names.find(name => name.language.name === 'en').name}</h1>
       <p>{props.species.genera.find(genus => genus.language.name === 'en').genus}</p>
       <p>Types:&nbsp;{props.pokemon.types.length > 1
