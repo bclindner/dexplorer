@@ -309,7 +309,7 @@ export const MiscCard = (props) => (
     </p>
     <p>
       <b>Base Experience</b>&nbsp;
-      {props.species.base_experience}
+      {props.pokemon.base_experience}
     </p>
     <p>
       <b>Gender Ratio</b> {props.species.gender_rate === -1
