@@ -27,13 +27,18 @@ const EVDisplay = styled.div`
   text-align: center;
 `
 
+/**
+ * Stat bar outer portion.
+ */
 const Outer = styled.td`
   position: relative;
   width: 100%;
   height: 1.25em;
   background-color: black;
 `
-
+/**
+ * Stat bar inner portion.
+ */
 const Inner = styled.div`
   position:relative;
   height: 100%;
@@ -46,13 +51,20 @@ const Inner = styled.div`
   width: ${props => props.percent}%;
   background-color: ${props => props.color ? props.color : '#4286f4'};
 `
-
+/**
+ * Simple stat bar component.
+ * Takes percentage, color, and label attributes.
+ */
 export const StatBar = (props) => (
   <Outer>
     <Inner percent={props.percent} color={props.color}>{props.label}</Inner>
   </Outer>
 )
 
+/**
+ * Card to display a centered image.
+ * Used in the info display here to display the sprite.
+ */
 export const ImageCard = (props) => (
   <RG.Centered>
     <Card>
@@ -61,6 +73,9 @@ export const ImageCard = (props) => (
   </RG.Centered>
 )
 
+/**
+ * Card to display basic info about the Pokemon.
+ */
 export const NameCard = (props) => (
   <Card>
     <small>#394</small>
@@ -72,6 +87,9 @@ export const NameCard = (props) => (
   </Card>
 )
 
+/**
+ * Card to display the Pokemon's stats with graphical bars.
+ */
 export const StatCard = (props) => (
   <Card>
     <h2>Stats</h2>
@@ -106,6 +124,9 @@ export const StatCard = (props) => (
   </Card>
 )
 
+/**
+ * Card to display the effort values the Pokemon gives when defeated in battle.
+ */
 export const EVCard = (props) => (
   <Card>
     <h2>Effort Values</h2>
@@ -152,6 +173,9 @@ export const EVCard = (props) => (
   </Card>
 )
 
+/**
+ * Card which lists the Pokemon's moves.
+ */
 export const MoveCard = (props) => (
   <Card>
     <h2>Moveset</h2>
@@ -193,7 +217,9 @@ export const MoveCard = (props) => (
     </RG.Table>
   </Card>
 )
-
+/**
+ * Card which lists other miscellaneous information.
+ */
 export const MiscCard = (props) => (
   <Card>
     <h2>Other Info</h2>
@@ -212,7 +238,9 @@ export const MiscCard = (props) => (
   </Card>
 
 )
-
+/**
+ * Pokemon informational display, including name, stats, moves, and a picture.
+ */
 export const InfoDisplay = (props) => (
   <Container>
     <RG.Row>
