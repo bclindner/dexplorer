@@ -240,8 +240,8 @@ export const MoveCard = (props) => (
   <Card>
     <h2>Moveset</h2>
   <RG.Select onChange={props.handleGroupChange}>
-    {props.groups.map(group => (
-      <option value={group}>{group}</option>
+    {props.groups.map((group, i) => (
+      <option value={group} key={i}>{group}</option>
     ))}
   </RG.Select>
     <RG.StaticRow>
@@ -255,7 +255,7 @@ export const MoveCard = (props) => (
           <RG.Col span='2'>{move.version_group_details[0].level_learned_at || '-' }</RG.Col>
           <RG.Col span='5'>
             <Capitalize>
-              {move.move.name.split('-').join(' ')}
+              {move.move.name.replace(/-/g, ' ')}
             </Capitalize>
           </RG.Col>
           <RG.Col span='5'>
@@ -273,25 +273,36 @@ export const MoveCard = (props) => (
  */
 export const MiscCard = (props) => (
   <Card>
-    <Capitalize>
       <h2>Other Info</h2>
       <p>
+        <Capitalize>
         <b>Egg Group</b>&nbsp;
         {props.species.egg_groups.length > 1
           ? (props.species.egg_groups[0].name + ' / ' + props.species.egg_groups[1].name)
           : (props.species.egg_groups[0].name)
         }
+        </Capitalize>
       </p>
       <p>
-        <b>Catch Rate</b> {props.species.capture_rate}
+        <b>Catch Rate</b>&nbsp;
+        {props.species.capture_rate}
       </p>
       <p>
-        <b>Growth Rate</b> {props.species.growth_rate.name}
+        <b>Growth Rate</b>&nbsp;
+        <Capitalize>
+          {props.species.growth_rate.name}
+        </Capitalize>
       </p>
       <p>
-        <b>Base Happiness</b> {props.species.base_happiness}
+          <b>Base Happiness</b>&nbsp;
+          {props.species.base_happiness}
       </p>
-    </Capitalize>
+      <p>
+        <b>Gender Ratio</b> {props.species.gender_rate === -1
+            ? 'Genderless'
+            : (1 - props.species.gender_rate / 8) * 100 + '% male to ' + (props.species.gender_rate / 8 * 100) + '% female'
+        }
+      </p>
   </Card>
 
 )
@@ -352,24 +363,6 @@ export class InfoDisplayContainer extends Component {
       const vgroups = move.version_group_details
       if(vgroups.find(vgroup => vgroup.version_group.name === group)) {
         return true
-      } else {
-        return false
-      }
-    })
-    // sort the moves by level, too
-    moves = moves.sort((moveA, moveB) => {
-      // find the moves with the given version group details
-      const groupA = moveA.version_group_details.find(version_group => version_group.version_group.name === group)
-      const groupB = moveB.version_group_details.find(version_group => version_group.version_group.name === group)
-      // sort by level learned, then by learn method
-      if (groupA.level_learned_at < groupB.level_learned_at) {
-        return true
-      } else if (groupA.level_learned_at === groupB.level_learned_at) {
-        if (groupA.move_learn_method.name > groupB.move_learn_method.name) {
-          return true
-        } else {
-          return false
-        }
       } else {
         return false
       }
