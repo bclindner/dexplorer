@@ -4,12 +4,18 @@ import { NavLink } from 'react-router-dom'
 import { getSpeciesList } from '../PokeAPI.js'
 import { CenteredSpinner } from './LoadingSpinner.js'
 
+/**
+ * Styled sidebar container.
+ */
 export const Container = styled.aside`
   background-color: #1d1f21;
   width: 100%;
   height: 100%;
 `
 
+/**
+ * Styled search bar.
+ */
 export const SearchBar = styled.input`
   padding: 1em;
   box-sizing: border-box;
@@ -20,8 +26,10 @@ export const SearchBar = styled.input`
   border-radius: 0;'
 `
 
+/**
+ * Styled scrolling list.
+ */
 export const List = styled.ul`
-  color: white;
   width: 100%;
   padding-left: 0;
   margin: 0;
@@ -30,10 +38,17 @@ export const List = styled.ul`
   max-height: 800px;
 `
 
+/**
+ * Literally just a list item element without a bullet point.
+ */
 export const ListItem = styled.li`
   list-style-type: none;
 `
 
+/**
+ * A styled react-router NavLink to wrap ListItems in.
+ * Changes color when clicked and hovered on.
+ */
 export const ListLink = styled(NavLink)`
   padding: 1em 0 1em 1em;
   display: block;
@@ -52,6 +67,12 @@ export const ListLink = styled(NavLink)`
   }
 `
 
+/**
+ * Container for the searchable sidebar.
+ * Displays a list of Pokemon species from the PokeAPI in its list alphabetically.
+ * Allows for searching by name (admittedly a bit poorly).
+ * Clicking on a Pokemon links to it with react-router's NavLinks.
+ */
 export class PokemonSidebar extends Component {
   constructor (props) {
     super(props)
@@ -88,6 +109,7 @@ export class PokemonSidebar extends Component {
   async filterList (name) {
     // take the raw species list and get every entry that contains the given name
     // this is quite laggy; is there a faster way i don't know about?
+    // maybe debounce the input somehow to save resources?
     return this.state.speciesList.filter(species => species.name.includes(name))
   }
   async handleSearch (e) {
