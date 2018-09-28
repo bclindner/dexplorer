@@ -136,7 +136,7 @@ export class PokemonSidebar extends Component {
           <SearchBar placeholder='Search by name...' value={this.state.searchTerm} onChange={this.handleSearch} />
           <List>
             {list.map((species, i) => (
-              <ListLink to={'/' + species.name} key={i} activeClassName='activeLink'>
+              <ListLink to={species.name} key={i} activeClassName='activeLink'>
                 <ListItem>{species.prettyName}</ListItem>
               </ListLink>
             ))}

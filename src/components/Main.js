@@ -6,7 +6,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { PokemonSidebar } from './Sidebar.js'
 import { InfoDisplayContainer } from './Info.js'
 const Main = () => (
-  <BrowserRouter>
+  <BrowserRouter basename='/pokedex'>
     <Wrapper>
       <RG.Row>
         <RG.Col span='12'>
