@@ -19,34 +19,6 @@ export const Card = styled.div`
 
 `
 
-export const InfoDisplay = (props) => (
-  <Container>
-    <RG.Row>
-      <RG.Col span='4'>
-        <ImageCard />
-      </RG.Col>
-      <RG.Col span='8'>
-        <NameCard />
-      </RG.Col>
-    </RG.Row>
-    <RG.Row>
-      <RG.Col span='6'>
-        <StatCard />
-      </RG.Col>
-      <RG.Col span='6'>
-        <EVCard />
-      </RG.Col>
-    </RG.Row>
-    <RG.Row>
-      <RG.Col span='6'>
-        <MoveCard />
-      </RG.Col>
-      <RG.Col span='6'>
-        <MiscCard />
-      </RG.Col>
-    </RG.Row>
-  </Container>
-)
 const EVDisplay = styled.div`
   background-color: ${props => props.color ? props.color : '#FF5959'};
   color: #1d1f21;
@@ -54,12 +26,14 @@ const EVDisplay = styled.div`
   padding: 0.5em;
   text-align: center;
 `
+
 const Outer = styled.td`
   position: relative;
   width: 100%;
   height: 1.25em;
   background-color: black;
 `
+
 const Inner = styled.div`
   position:relative;
   height: 100%;
@@ -239,5 +213,33 @@ export const MiscCard = (props) => (
 
 )
 
-export default Info
+export const InfoDisplay = (props) => (
+  <Container>
+    <RG.Row>
+      <RG.Col span='4'>
+        <ImageCard />
+      </RG.Col>
+      <RG.Col span='8'>
+        <NameCard />
+      </RG.Col>
+    </RG.Row>
+    <RG.Row>
+      <RG.Col span='6'>
+        <StatCard />
+      </RG.Col>
+      <RG.Col span='6'>
+        <EVCard />
+      </RG.Col>
+    </RG.Row>
+    <RG.Row>
+      <RG.Col span='6'>
+        <MoveCard />
+      </RG.Col>
+      <RG.Col span='6'>
+        <MiscCard />
+      </RG.Col>
+    </RG.Row>
+  </Container>
+)
 
+export default Info
