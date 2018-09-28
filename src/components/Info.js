@@ -87,18 +87,20 @@ export const StatBar = (props) => (
 )
 
 /**
- * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants.
+ * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants, if there are any.
  */
 export const SpriteVariantCard = (props) => (
   <Card>
     <RG.Centered>
       <RG.Image src={props.pokemon.sprites.front_default} />
     </RG.Centered>
-    <RG.Select onChange={props.handleVariantChange}>
-      {props.species.varieties.map((variant, i) => (
-        <option value={variant.pokemon.name} key={i}>{variant.pokemon.name}</option>
-      ))}
-    </RG.Select>
+    {props.species.varieties.length > 1 && (
+      <RG.Select onChange={props.handleVariantChange}>
+        {props.species.varieties.map((variant, i) => (
+          <option value={variant.pokemon.name} key={i}>{variant.pokemon.name}</option>
+        ))}
+      </RG.Select>
+    )}
   </Card>
 )
 
