@@ -1,7 +1,7 @@
 {
-  "name": "project-pokedex",
-  "version": "0.1.0",
-  "private": true,
+  "name": "dexplorer",
+  "version": "1.0.0",
+  "private": false,
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -17,7 +17,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://bclindner.github.io/pokedex",
+  "homepage": "https://bclindner.github.io/dexplorer",
   "devDependencies": {
     "gh-pages": "^2.0.0"
   }
