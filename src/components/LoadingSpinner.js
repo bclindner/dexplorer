@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
+import pokeball from '../pokeball.png'
 
 /**
  * A nice spinning animation.
@@ -38,4 +39,4 @@ export const LoadingSpinner = styled.div`
 /**
  * LoadingSpinner, but with a Pokeball!
  */
-export const PokeballSpinner = () => <LoadingSpinner url='img/pokeball.png' />
+export const PokeballSpinner = () => <LoadingSpinner url={pokeball} />
