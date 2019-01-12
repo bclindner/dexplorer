@@ -10,6 +10,7 @@ export const getList = () => (dispatch) => {
     })))
     // sort the list alphabetically
     .then(list => list.sort((a, b) => a.name > b.name))
+    .then(sortedList => dispatch(receiveList(sortedList)))
 }
 
 export const REQUEST_LIST = 'REQUEST_LIST'

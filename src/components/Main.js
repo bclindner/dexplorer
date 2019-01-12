@@ -3,7 +3,7 @@ import { RG, Wrapper } from './Layout.js'
 import { Header } from './Header.js'
 import { Footer } from './Footer.js'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import { PokemonSidebar } from './Sidebar.js'
+import PokemonSidebar from '../containers/List'
 import { InfoDisplayContainer, InfoDisplayWelcome } from './Info.js'
 const Main = () => (
   <BrowserRouter>
