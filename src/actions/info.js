@@ -1,6 +1,8 @@
+import api from '../utils/api'
+
 export const getSpecies = name => dispatch => {
   dispatch(requestSpecies())
-  window.fetch(`//pokeapi.co/api/v2/pokemon-species/${name}/`)
+  api(`//pokeapi.co/api/v2/pokemon-species/${name}/`)
     .then(resp => resp.json())
     .then(json => {
       dispatch(receiveSpecies(json))
@@ -22,7 +24,7 @@ export const receiveSpecies = data => ({
 
 export const getVariant = name => dispatch => {
   dispatch(requestVariant())
-  window.fetch(`//pokeapi.co/api/v2/pokemon/${name}/`)
+  api(`//pokeapi.co/api/v2/pokemon/${name}/`)
     .then(resp => resp.json())
     .then(json => dispatch(receiveVariant(json)))
 }

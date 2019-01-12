@@ -1,6 +1,9 @@
+import { alphabeticalSortByName } from '../utils/sort'
+import api from '../utils/api'
+
 export const getList = () => (dispatch) => {
   dispatch(requestList())
-  window.fetch('//pokeapi.co/api/v2/pokemon-species/')
+  api('//pokeapi.co/api/v2/pokemon-species/')
     .then(resp => resp.json())
     // simplify api result
     .then(json => json.results.map(result => ({
@@ -9,7 +12,7 @@ export const getList = () => (dispatch) => {
       visible: true
     })))
     // sort the list alphabetically
-    .then(list => list.sort((a, b) => a.name > b.name))
+    .then(list => list.sort(alphabeticalSortByName))
     .then(sortedList => dispatch(receiveList(sortedList)))
 }
 
@@ -36,3 +39,4 @@ const prettyName = (name) => name.split('-').map((word) => {
   return word.charAt(0).toUpperCase() + word.substring(1)
   // then re-add the dashes
 }).join('-')
+
