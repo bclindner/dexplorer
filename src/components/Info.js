@@ -108,24 +108,29 @@ StatBar.PropTypes = {
 /**
  * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants, if there are any.
  */
-export const SpriteVariantCard = ({sprite, variants, handleVariantChange}) => (
-  <Card>
-    <RG.Centered>
-      <RG.Image src={sprite} />
-    </RG.Centered>
-    {variants.length > 1 && (
-      <RG.Select onChange={handleVariantChange}>
-        {variants.map((variant, i) => (
-          <option value={variant.name} key={i}>{variant.name}</option>
-        ))}
-      </RG.Select>
-    )}
-  </Card>
-)
+class SpriteVariantCard extends Component {
+  render () {
+    const {currentVariant, sprite, variants} = this.props
+    return (
+      <Card>
+        <RG.Centered>
+          <RG.Image src={sprite} />
+        </RG.Centered>
+        {variants.length > 1 && (
+          <RG.Select onChange={(evt) => this.props.getVariant(evt.target.value)} value={currentVariant}>
+            {variants.map((variant, i) => (
+              <option value={variant.name} key={i}>{variant.name}</option>
+            ))}
+          </RG.Select>
+        )}
+      </Card>
+    )
+  }
+}
 SpriteVariantCard.PropTypes = {
   sprite: PropTypes.string.isRequired,
   variants: PropTypes.arrayOf(PropTypes.string),
-  handleVariantChange: PropTypes.func.isRequired
+  getVariant: PropTypes.func.isRequired
 }
 
 /**
@@ -297,7 +302,7 @@ EVCard.PropTypes = {
 /**
  * Card which lists the Pokemon's moves.
  */
-export const MoveCard = ({handleGroupChange, groups, moves}) => (
+export const MoveCard = ({currentGroup, handleGroupChange, groups, moves}) => (
   <Card>
     <h2>Moveset</h2>
     <RG.Select onChange={handleGroupChange}>
@@ -311,7 +316,7 @@ export const MoveCard = ({handleGroupChange, groups, moves}) => (
       <RG.Col span='5'><strong>Learned By</strong></RG.Col>
     </RG.StaticRow>
     <ScrollingMoveList>
-      {moves.map((move, i) => (
+      {moves.filter(move => move.versionGroups.includes(currentGroup)).map((move, i) => (
         <RG.StaticRow key={i}>
           <RG.Col span='2'>
             {}
@@ -397,18 +402,20 @@ MiscCard.PropTypes = {
  */
 export class InfoDisplay extends Component {
   componentDidMount () {
-    const pokemon = this.props.match.params.pokemon
-    this.props.getSpecies(pokemon)
+    this.props.getSpecies(this.props.pokemon)
   }
   render () {
     const {
       status,
+      currentGroup,
+      currentVariant,
       info,
       stats,
       effortValues,
       moves,
       groups,
-      misc
+      misc,
+      getVariant
     } = this.props
     switch (status) {
       case 'loading':
@@ -422,7 +429,8 @@ export class InfoDisplay extends Component {
               <RG.Col span='4'>
                 <SpriteVariantCard
                   {...info}
-                  handleVariantChange={this.handleVariantChange}
+                  currentVariant={currentVariant}
+                  getVariant={getVariant}
                 />
               </RG.Col>
               <RG.Col span='8'>
@@ -448,6 +456,7 @@ export class InfoDisplay extends Component {
                 <MoveCard
                   moves={moves}
                   groups={groups}
+                  currentGroup={currentGroup}
                   handleGroupChange={this.handleGroupChange}
                 />
               </RG.Col>

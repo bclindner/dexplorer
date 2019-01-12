@@ -115,7 +115,7 @@ export default function info (state = initialState, action) {
     case REQUEST_VARIANT:
       return {
         ...state,
-        status: 'loading'
+        status: state.status === 'ready' ? 'ready' : 'loading'
       }
     case RECEIVE_VARIANT:
       // stats
@@ -129,7 +129,6 @@ export default function info (state = initialState, action) {
       // maps move array
       // reduces version group details into an object
       // adds the groups into an array as well
-      let groups = []
       const moves = action.data.moves.map(move => ({
         name: move.name,
         versionGroups: move.version_group_details.map(versionGroup => ({
@@ -138,9 +137,16 @@ export default function info (state = initialState, action) {
           level: versionGroup.level_learned_at
         }))
       }))
+      let groups = []
+      moves.forEach(move => move.versionGroups.forEach(versionGroup => {
+        if (!groups.includes(versionGroup.name)) {
+          groups.push(versionGroup.name)
+        }
+      }))
       const newState = {
         ...state,
         currentVariant: action.data.name,
+        currentGroup: groups[0],
         status: 'ready',
         info: {
           ...state.info,

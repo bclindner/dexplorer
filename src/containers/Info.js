@@ -4,10 +4,13 @@ import { getSpecies, getVariant } from '../actions/info'
 
 const mapDispatchToProps = dispatch => ({
   getSpecies: name => dispatch(getSpecies(name)),
-  getVariant
+  getVariant: name => dispatch(getVariant(name))
 })
 
-const mapStateToProps = state => state.info
+const mapStateToProps = (state, ownProps) => ({
+  ...state.info,
+  pokemon: ownProps.match.params.pokemon
+})
 
 export default connect(
   mapStateToProps,
