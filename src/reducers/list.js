@@ -12,20 +12,17 @@ const initialState = {
 export default function list (state = initialState, action) {
   switch (action.type) {
     case REQUEST_LIST:
-      console.log('list requested')
       return {
         ...state,
         loading: true
       }
     case RECEIVE_LIST:
-      console.log('list received')
       return {
         ...state,
         loading: false,
         list: action.list
       }
     case FILTER_LIST:
-      console.log('filtering by ' + action.term)
       return {
         ...state,
         list: state.list.map(pokemon => ({
