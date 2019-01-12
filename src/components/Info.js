@@ -474,6 +474,19 @@ export class InfoDisplay extends Component {
     }
   }
 }
+InfoDisplay.propTypes = {
+  status: PropTypes.string.isRequired,
+  currentGroup: PropTypes.string.isRequired,
+  currentVariant: PropTypes.string.isRequired,
+  info: PropTypes.object.isRequired,
+  stats: PropTypes.object.isRequired,
+  effortValues: PropTypes.object.isRequired,
+  moves: PropTypes.array.isRequired,
+  misc: PropTypes.object.isRequired,
+  getVariant: PropTypes.func.isRequired,
+  selectGroup: PropTypes.func.isRequired,
+  getSpecies: PropTypes.func.isRequired
+}
 
 export const InfoDisplayWelcome = () => (
   <Container>
