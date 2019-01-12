@@ -1,6 +1,6 @@
 export const getList = () => (dispatch) => {
   dispatch(requestList())
-  window.fetch('https://pokeapi.co/api/v2/pokemon-species')
+  window.fetch('//pokeapi.co/api/v2/pokemon-species')
     .then(resp => resp.json())
     // simplify api result
     .then(json => json.results.map(result => ({

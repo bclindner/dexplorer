@@ -8,7 +8,7 @@ import PokemonSidebar from '../containers/List'
 import InfoDisplay from '../containers/Info'
 import { history } from '../reducers/main'
 const Main = () => (
-  <ConnectedRouter history={history}>
+  <ConnectedRouter history={history} basename={process.env.PUBLIC_URL}>
     <Wrapper>
       <RG.Row>
         <RG.Col span='12'>
@@ -21,7 +21,7 @@ const Main = () => (
         </RG.Col>
         <RG.Col span='8'>
           <Switch>
-            <Route path={process.env.PUBLIC_URL + '/:pokemon?'} component={InfoDisplay} />
+            <Route path='/:pokemon(a-z\-)?' component={InfoDisplay} />
           </Switch>
         </RG.Col>
       </RG.Row>
