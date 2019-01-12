@@ -8,12 +8,16 @@ import {
 const lang = 'en'
 
 const initialState = {
-  ready: false,
+  currentVariant: '',
+  currentGroup: '',
   loading: false,
   info: {
     pokedexNumber: 0,
     name: '',
     genus: '',
+    types: [
+      // ''
+    ],
     abilities: [
       // ''
     ],
@@ -46,12 +50,16 @@ const initialState = {
   moves: [
     // {
     //   name: ''
-    //   versionGroups: [
-    //     name: '',
-    //     level: 0,
-    //     learnedBy: ''
-    //   ]
+    //   versionGroups: {
+    //     "name": {
+    //       level: 0,
+    //       learnedBy: ''
+    //    }
+    //   }
     // }
+  ],
+  groups: [
+    // ''
   ],
   misc: {
     eggGroups: [],
@@ -99,7 +107,7 @@ export default function info (state = initialState, action) {
           captureRate: action.data.capture_rate,
           growthRate: action.data.growth_rate.name,
           baseHappiness: action.data.base_happiness,
-          genderRatio: action.data.gender_rate / 8
+          genderRatio: action.data.gender_rate / 8 * 100
         }
       }
       // determine genus
@@ -116,20 +124,31 @@ export default function info (state = initialState, action) {
       const spatk = action.data.stats.find(entry => entry.stat.name === 'special-attack')
       const spdef = action.data.stats.find(entry => entry.stat.name === 'special-defense')
       const speed = action.data.stats.find(entry => entry.stat.name === 'speed')
-      // map moves from response
+      // this next block does a lot:
+      // maps move array
+      // reduces version group details into an object
+      // adds the groups into an array as well
+      let groups = []
       const moves = action.data.moves.map(move => ({
         name: move.name,
-        versionGroups: move.version_group_details.map(versionGroup => ({
-          name: versionGroup.version_group.name,
-          learnedBy: versionGroup.move_learn_method.name,
-          level: versionGroup.level_learned_at
-        }))
+        versionGroups: move.version_group_details.reduce((obj, versionGroup) => {
+          const name = versionGroup.version_group.name
+          if (!groups.includes(name)) {
+            groups.push(name)
+          }
+          obj[name] = {
+            learnedBy: versionGroup.move_learn_method.name,
+            level: versionGroup.level_learned_at
+          }
+          return obj
+        })
       }))
       return {
         loading: false,
         info: {
           ...state.info,
           abilities: action.data.abilities.map(entry => entry.name),
+          types: action.data.types.map(entry => entry.type.name),
           height: action.data.height / 10,
           weight: action.data.weight / 10,
           sprite: action.data.sprites.front_default
@@ -151,6 +170,7 @@ export default function info (state = initialState, action) {
           speed: speed.effort
         },
         moves,
+        groups,
         misc: {
           ...state.misc,
           baseExp: action.data.base_experience

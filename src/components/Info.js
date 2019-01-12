@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { RG } from './Layout.js'
-import { getSpecies, getPokemon } from '../utils/PokeAPI.js'
 import { PokeballSpinner } from './LoadingSpinner.js'
 import colors from '../utils/colors.js'
+import PropTypes from 'prop-types'
 
 /**
  * Container for the info display.
@@ -43,15 +43,21 @@ export const ScrollingMoveList = styled.div`
 
 /**
  * A div which somewhat mimics the look of Bulbapedia's EV display boxes.
- * (if it ain't broke...)
+ * (If it ain't broke...)
  */
 const EVDisplay = styled.div`
-  background-color: ${props => props.color ? props.color : colors.light};
+  background-color: ${props => props.color};
   color: ${colors.darker};
   margin: 0.5em;
   padding: 0.5em;
   text-align: center;
 `
+EVDisplay.PropTypes = {
+  color: PropTypes.string
+}
+EVDisplay.defaultProps = {
+  color: colors.light
+}
 
 /**
  * Stat bar outer portion.
@@ -74,64 +80,91 @@ const StatBarInner = styled.div`
   color: ${props => props.percent < 10 ? 'white' : colors.darker};
   text-align: right;
   width: ${props => props.percent}%;
-  background-color: ${props => props.color ? props.color : colors.light};
+  background-color: ${props => props.color};
 `
+StatBarInner.PropTypes = {
+  percent: PropTypes.number.isRequired,
+  color: PropTypes.string
+}
+StatBarInner.defaultProps = {
+  color: colors.light
+}
+
 /**
  * Simple stat bar component.
  * Takes percentage, color, and label attributes.
  */
-export const StatBar = (props) => (
+export const StatBar = ({percent, color, label}) => (
   <StatBarOuter>
-    <StatBarInner percent={props.percent} color={props.color}>{props.label}</StatBarInner>
+    <StatBarInner percent={percent} color={color}>{label}</StatBarInner>
   </StatBarOuter>
 )
+StatBar.PropTypes = {
+  percent: PropTypes.number.isRequired,
+  color: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
+}
 
 /**
  * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants, if there are any.
  */
-export const SpriteVariantCard = ({pokemon, species, handleVariantChange}) => (
+export const SpriteVariantCard = ({sprite, variants, handleVariantChange}) => (
   <Card>
     <RG.Centered>
-      <RG.Image src={pokemon.sprites.front_default} />
+      <RG.Image src={sprite} />
     </RG.Centered>
-    {species.varieties.length > 1 && (
+    {variants.length > 1 && (
       <RG.Select onChange={handleVariantChange}>
-        {species.varieties.map((variant, i) => (
-          <option value={variant.pokemon.name} key={i}>{variant.pokemon.name}</option>
+        {variants.map((variant, i) => (
+          <option value={variant.name} key={i}>{variant.name}</option>
         ))}
       </RG.Select>
     )}
   </Card>
 )
+SpriteVariantCard.PropTypes = {
+  sprite: PropTypes.string.isRequired,
+  variants: PropTypes.arrayOf(PropTypes.string),
+  handleVariantChange: PropTypes.func.isRequired
+}
 
 /**
  * Card to display basic info about the Pokemon.
  */
-export const NameCard = ({species, pokemon}) => (
+export const NameCard = props => (
   <Card>
     <Capitalize>
-      <small>#{species.pokedex_numbers.length > 0
-        ? species.pokedex_numbers.find(p => p.pokedex.name === 'national').entry_number
+      <small>#{props.pokedexNumber !== null
+        ? props.pokedexNumber
         : '???'
       }
       </small>
-      <h1>{species.names.find(name => name.language.name === 'en').name}</h1>
-      <p>{species.genera.find(genus => genus.language.name === 'en').genus}</p>
-      <p>Types:&nbsp;{pokemon.types.length > 1
-        ? (pokemon.types[0].type.name + ' / ' + pokemon.types[1].type.name)
-        : (pokemon.types[0].type.name)
+      <h1>{props.name}</h1>
+      <p>{props.genus}</p>
+      <p>Types:&nbsp;{props.types.length > 1
+        ? (props.types[0] + ' / ' + props.types[1])
+        : (props.types[0])
       }
       </p>
-      <p>Abilities:&nbsp;{pokemon.abilities.length > 1
-        ? (pokemon.abilities[0].ability.name + ' / ' + pokemon.abilities[1].ability.name)
-        : (pokemon.abilities[0].ability.name)
+      <p>Abilities:&nbsp;{props.abilities.length > 1
+        ? (props.abilities[0] + ' / ' + props.abilities[1])
+        : (props.abilities[0])
       }
       </p>
-      <p>Height: {pokemon.height / 10}m</p>
-      <p>Weight: {pokemon.weight / 10}kg</p>
+      <p>Height: {props.height}m</p>
+      <p>Weight: {props.weight}kg</p>
     </Capitalize>
   </Card>
 )
+NameCard.PropTypes = {
+  pokedexNumber: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  genus: PropTypes.string.isRequired,
+  types: PropTypes.arrayOf(PropTypes.string).isRequired,
+  abilities: PropTypes.arrayOf(PropTypes.string).isRequired,
+  height: PropTypes.number.isRequired,
+  weight: PropTypes.number.isRequired
+}
 
 /**
  * Card to display the Pokemon's stats with graphical bars.
@@ -144,48 +177,48 @@ export const StatCard = ({stats}) => (
         <tr>
           <td>HP</td>
           <StatBar
-            label={stats.find(x => x.stat.name === 'hp').base_stat}
-            percent={stats.find(x => x.stat.name === 'hp').base_stat / 255 * 100}
+            label={stats.hp}
+            percent={stats.hp / 255 * 100}
             color={colors.stat.hp}
           />
         </tr>
         <tr>
           <td>Attack</td>
           <StatBar
-            label={stats.find(x => x.stat.name === 'attack').base_stat}
-            percent={stats.find(x => x.stat.name === 'attack').base_stat / 255 * 100}
+            label={stats.atk}
+            percent={stats.atk / 255 * 100}
             color={colors.stat.atk}
           />
         </tr>
         <tr>
           <td>Defense</td>
           <StatBar
-            label={stats.find(x => x.stat.name === 'defense').base_stat}
-            percent={stats.find(x => x.stat.name === 'defense').base_stat / 255 * 100}
+            label={stats.def}
+            percent={stats.def / 255 * 100}
             color={colors.stat.def}
           />
         </tr>
         <tr>
           <td>Sp.Atk.</td>
           <StatBar
-            label={stats.find(x => x.stat.name === 'special-attack').base_stat}
-            percent={stats.find(x => x.stat.name === 'special-attack').base_stat / 255 * 100}
+            label={stats.spatk}
+            percent={stats.spatk / 255 * 100}
             color={colors.stat.spatk}
           />
         </tr>
         <tr>
           <td>Sp.Def.</td>
           <StatBar
-            label={stats.find(x => x.stat.name === 'special-defense').base_stat}
-            percent={stats.find(x => x.stat.name === 'special-defense').base_stat / 255 * 100}
+            label={stats.spdef}
+            percent={stats.spdef / 255 * 100}
             color={colors.stat.spdef}
           />
         </tr>
         <tr>
           <td>Speed</td>
           <StatBar
-            label={stats.find(x => x.stat.name === 'speed').base_stat}
-            percent={stats.find(x => x.stat.name === 'speed').base_stat / 255 * 100}
+            label={stats.speed}
+            percent={stats.speed / 255 * 100}
             color={colors.stat.speed}
           />
         </tr>
@@ -193,30 +226,40 @@ export const StatCard = ({stats}) => (
     </table>
   </Card>
 )
+StatCard.PropTypes = {
+  stats: PropTypes.shape({
+    hp: PropTypes.number.isRequired,
+    atk: PropTypes.number.isRequired,
+    def: PropTypes.number.isRequired,
+    spatk: PropTypes.number.isRequired,
+    spdef: PropTypes.number.isRequired,
+    speed: PropTypes.number.isRequired
+  }).isRequired
+}
 
 /**
  * Card to display the effort values the Pokemon gives when defeated in battle.
  */
-export const EVCard = ({stats}) => (
+export const EVCard = ({effortValues}) => (
   <Card>
     <h2>Effort Values</h2>
     <RG.Row>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.hp}>
           HP<br />
-          {stats.find(x => x.stat.name === 'hp').effort}
+          {effortValues.hp}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.atk}>
           Atk<br />
-          {stats.find(x => x.stat.name === 'attack').effort}
+          {effortValues.atk}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.def}>
           Def<br />
-          {stats.find(x => x.stat.name === 'defense').effort}
+          {effortValues.def}
         </EVDisplay>
       </RG.Col>
     </RG.Row>
@@ -224,24 +267,34 @@ export const EVCard = ({stats}) => (
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.spatk}>
           Sp.Atk.<br />
-          {stats.find(x => x.stat.name === 'special-attack').effort}
+          {effortValues.spatk}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.spdef}>
           Sp.Def.<br />
-          {stats.find(x => x.stat.name === 'special-defense').effort}
+          {effortValues.spdef}
         </EVDisplay>
       </RG.Col>
       <RG.Col span='4'>
         <EVDisplay color={colors.stat.speed}>
           Speed<br />
-          {stats.find(x => x.stat.name === 'speed').effort}
+          {effortValues.speed}
         </EVDisplay>
       </RG.Col>
     </RG.Row>
   </Card>
 )
+EVCard.PropTypes = {
+  effortValues: PropTypes.shape({
+    hp: PropTypes.number.isRequired,
+    atk: PropTypes.number.isRequired,
+    def: PropTypes.number.isRequired,
+    spatk: PropTypes.number.isRequired,
+    spdef: PropTypes.number.isRequired,
+    speed: PropTypes.number.isRequired
+  }).isRequired
+}
 
 /**
  * Card which lists the Pokemon's moves.
@@ -262,15 +315,17 @@ export const MoveCard = ({handleGroupChange, groups, moves}) => (
     <ScrollingMoveList>
       {moves.map((move, i) => (
         <RG.StaticRow key={i}>
-          <RG.Col span='2'>{move.version_group_details[0].level_learned_at || '-' }</RG.Col>
+          <RG.Col span='2'>
+            {}
+          </RG.Col>
           <RG.Col span='5'>
             <Capitalize>
-              {move.move.name.replace(/-/g, ' ')}
+              {}
             </Capitalize>
           </RG.Col>
           <RG.Col span='5'>
             <Capitalize>
-              {move.version_group_details[0].move_learn_method.name}
+              {}
             </Capitalize>
           </RG.Col>
         </RG.StaticRow>
@@ -278,79 +333,99 @@ export const MoveCard = ({handleGroupChange, groups, moves}) => (
     </ScrollingMoveList>
   </Card>
 )
+MoveCard.PropTypes = {
+  groups: PropTypes.arrayOf(PropTypes.string).isRequired,
+  moves: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    versionGroups: PropTypes.opjectOf(PropTypes.shape({
+      level: PropTypes.number,
+      learnedBy: PropTypes.string.isRequired
+    })).isRequired
+  })).isRequired
+}
+
 /**
  * Card which lists other miscellaneous information.
  */
-export const MiscCard = ({species, pokemon}) => (
+export const MiscCard = props => (
   <Card>
     <h2>Other Info</h2>
     <p>
       <Capitalize>
         <b>Egg Group</b>&nbsp;
-        {species.egg_groups.length > 1
-          ? (species.egg_groups[0].name + ' / ' + species.egg_groups[1].name)
-          : (species.egg_groups[0].name)
+        {props.eggGroups.length > 1
+          ? (props.eggGroups[0] + ' / ' + props.eggGroups[1])
+          : (props.eggGroups[0])
         }
       </Capitalize>
     </p>
     <p>
       <b>Catch Rate</b>&nbsp;
-      {species.capture_rate}
+      {props.captureRate}
     </p>
     <p>
       <b>Growth Rate</b>&nbsp;
       <Capitalize>
-        {species.growth_rate.name}
+        {props.growthRate}
       </Capitalize>
     </p>
     <p>
       <b>Base Happiness</b>&nbsp;
-      {species.base_happiness}
+      {props.baseHappiness}
     </p>
     <p>
       <b>Base Experience</b>&nbsp;
-      {pokemon.base_experience}
+      {props.baseExperience}
     </p>
     <p>
-      <b>Gender Ratio</b> {species.gender_rate === -1
+      <b>Gender Ratio</b> {props.genderRatio < 0
         ? 'Genderless'
-        : (1 - species.gender_rate / 8) * 100 + '% male to ' + (species.gender_rate / 8 * 100) + '% female'
+        : (100 - props.genderRatio) + '% male to ' + (props.genderRatio) + '% female'
       }
     </p>
   </Card>
-
 )
+MiscCard.PropTypes = {
+  eggGroups: PropTypes.arrayOf(PropTypes.string).isRequired,
+  captureRate: PropTypes.number.isRequired,
+  growthRate: PropTypes.string.isRequired,
+  baseHappiness: PropTypes.number.isRequired,
+  baseExperience: PropTypes.number.isRequired,
+  genderRatio: PropTypes.number.isRequired
+}
+
 /**
  * Pokemon informational display, including name, stats, moves, and a picture.
  */
-export const InfoDisplay = ({pokemon, species, moves, groups, handleVariantChange, handleGroupChange}) => (
+export const InfoDisplay = props => (
   <Container>
     <RG.Row>
       <RG.Col span='4'>
-        <SpriteVariantCard pokemon={pokemon} species={species} handleVariantChange={handleVariantChange} />
+        <SpriteVariantCard />
       </RG.Col>
       <RG.Col span='8'>
-        <NameCard pokemon={pokemon} species={species} />
+        <NameCard />
       </RG.Col>
     </RG.Row>
     <RG.Row>
       <RG.Col span='6'>
-        <StatCard stats={pokemon.stats} />
+        <StatCard />
       </RG.Col>
       <RG.Col span='6'>
-        <EVCard stats={pokemon.stats} />
+        <EVCard />
       </RG.Col>
     </RG.Row>
     <RG.Row>
       <RG.Col span='6'>
-        <MoveCard moves={moves} groups={groups} handleGroupChange={handleGroupChange} />
+        <MoveCard />
       </RG.Col>
       <RG.Col span='6'>
-        <MiscCard pokemon={pokemon} species={species} />
+        <MiscCard />
       </RG.Col>
     </RG.Row>
   </Container>
 )
+
 export class InfoDisplayContainer extends Component {
   constructor (props) {
     super(props)
