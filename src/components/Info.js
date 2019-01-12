@@ -169,7 +169,7 @@ NameCard.PropTypes = {
 /**
  * Card to display the Pokemon's stats with graphical bars.
  */
-export const StatCard = ({stats}) => (
+export const StatCard = (stats) => (
   <Card>
     <h2>Stats</h2>
     <table>
@@ -227,20 +227,18 @@ export const StatCard = ({stats}) => (
   </Card>
 )
 StatCard.PropTypes = {
-  stats: PropTypes.shape({
-    hp: PropTypes.number.isRequired,
-    atk: PropTypes.number.isRequired,
-    def: PropTypes.number.isRequired,
-    spatk: PropTypes.number.isRequired,
-    spdef: PropTypes.number.isRequired,
-    speed: PropTypes.number.isRequired
-  }).isRequired
+  hp: PropTypes.number.isRequired,
+  atk: PropTypes.number.isRequired,
+  def: PropTypes.number.isRequired,
+  spatk: PropTypes.number.isRequired,
+  spdef: PropTypes.number.isRequired,
+  speed: PropTypes.number.isRequired
 }
 
 /**
  * Card to display the effort values the Pokemon gives when defeated in battle.
  */
-export const EVCard = ({effortValues}) => (
+export const EVCard = (effortValues) => (
   <Card>
     <h2>Effort Values</h2>
     <RG.Row>
@@ -337,7 +335,7 @@ MoveCard.PropTypes = {
   groups: PropTypes.arrayOf(PropTypes.string).isRequired,
   moves: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
-    versionGroups: PropTypes.opjectOf(PropTypes.shape({
+    versionGroups: PropTypes.objectOf(PropTypes.shape({
       level: PropTypes.number,
       learnedBy: PropTypes.string.isRequired
     })).isRequired
@@ -397,189 +395,92 @@ MiscCard.PropTypes = {
 /**
  * Pokemon informational display, including name, stats, moves, and a picture.
  */
-export const InfoDisplay = props => (
-  <Container>
-    <RG.Row>
-      <RG.Col span='4'>
-        <SpriteVariantCard />
-      </RG.Col>
-      <RG.Col span='8'>
-        <NameCard />
-      </RG.Col>
-    </RG.Row>
-    <RG.Row>
-      <RG.Col span='6'>
-        <StatCard />
-      </RG.Col>
-      <RG.Col span='6'>
-        <EVCard />
-      </RG.Col>
-    </RG.Row>
-    <RG.Row>
-      <RG.Col span='6'>
-        <MoveCard />
-      </RG.Col>
-      <RG.Col span='6'>
-        <MiscCard />
-      </RG.Col>
-    </RG.Row>
-  </Container>
-)
-
-export class InfoDisplayContainer extends Component {
-  constructor (props) {
-    super(props)
-    // initialize state
-    this.state = {
-      loaded: false,
-      speciesName: '',
-      pokemonName: '',
-      pokemonData: {},
-      speciesData: {},
-      versionGroups: [],
-      moves: []
-    }
-    // bind functions to be passed to children
-    this.handleVariantChange = this.handleVariantChange.bind(this)
-    this.handleGroupChange = this.handleGroupChange.bind(this)
-  }
-  // restrict updating since we put a hook to refetch on componentWillUpdate
-  async shouldComponentUpdate (newProps, newState) {
-    return newState.speciesName === newProps.match.params.speciesName
-  }
-  filterGroups (group) {
-    // get the moves from the first version group
-    let moves = this.state.pokemonData.moves.filter(move => {
-      const vgroups = move.version_group_details
-      if (vgroups.find(vgroup => vgroup.version_group.name === group)) {
-        return true
-      } else {
-        return false
-      }
-    })
-    // sort moves by name
-    moves = moves.sort((a, b) => a.move.name > b.move.name)
-    // set the moves state accordingly
-    this.setState({moves: moves})
-  }
-  async changeVariant (variant) {
-    const pokemonData = await getPokemon(variant)
-    // get the version groups from the moveset
-    let groups = []
-    // for each move
-    pokemonData.moves.forEach(move => {
-      // for each version group
-      move.version_group_details.forEach(group => {
-        // check if its name is already in the array
-        if (groups.indexOf(group.version_group.name) === -1) {
-          // if it isn't, add it
-          groups.push(group.version_group.name)
-        }
-      })
-    })
-    this.setState({
-      pokemonName: variant,
-      pokemonData: pokemonData,
-      versionGroups: groups
-    }, () => { this.filterGroups(groups[0]) })
-  }
-  handleGroupChange (e) {
-    this.filterGroups(e.target.value)
-  }
-  async handleVariantChange (e) {
-    console.log('running?')
-    this.changeVariant(e.target.value)
-  }
-  async updateData () {
-    try {
-      // get the species data first
-      // unfortunately pokemon data can't be fetched in parallel because
-      // species name !== the default variant name. see: deoxys, aegislash, etc
-      const speciesName = this.props.match.params.speciesName
-      const speciesData = await getSpecies(speciesName)
-      // get the default variant out of speciesData
-      const defaultVariant = speciesData.varieties.find(variant => variant.is_default).pokemon.name
-      // get the pokemon data for the default variant
-      const pokemonData = await getPokemon(defaultVariant)
-      // get the version groups from the moveset
-      let groups = []
-      // for each move
-      pokemonData.moves.forEach(move => {
-        // for each version group
-        move.version_group_details.forEach(group => {
-          // check if its name is already in the array
-          if (groups.indexOf(group.version_group.name) === -1) {
-            // if it isn't, add it
-            groups.push(group.version_group.name)
-          }
-        })
-      })
-      // set our state accordingly, then trigger an initial group filter
-      this.setState({
-        error: '',
-        speciesName: speciesName,
-        pokemonName: defaultVariant,
-        pokemonData: pokemonData,
-        speciesData: speciesData,
-        versionGroups: groups
-      }, () => { this.filterGroups(groups[0]) })
-    } catch (err) {
-      console.log(err)
-      this.setState({
-        error: err,
-        speciesName: this.props.match.params.speciesName
-      })
-    }
-  }
-  // run the update when the component mounts (in the event the page is accessed with a pokemon already in URL)
-  async componentDidMount () {
-    return this.updateData()
-  }
-  // run the update when the component updates (which happens whenever the location changes) AND when the data already fetched does not appear to match the new URL
-  async componentDidUpdate () {
-    if (this.state.speciesName !== this.props.match.params.speciesName) {
-      return this.updateData()
-    }
-  }
+export class InfoDisplay extends Component {
   render () {
-    if ('name' in this.state.pokemonData && this.state.speciesName === this.props.match.params.speciesName) {
-      return (
-        <InfoDisplay
-          pokemon={this.state.pokemonData}
-          species={this.state.speciesData}
-          groups={this.state.versionGroups}
-          moves={this.state.moves}
-          handleGroupChange={this.handleGroupChange}
-          handleVariantChange={this.handleVariantChange}
-        />
-      )
-    } else if (this.state.error) {
-      // error screen
-      return (
-        <Container>
-          <RG.Centered>
-            <h1>Something went wrong, sorry!</h1>
-          </RG.Centered>
-        </Container>
-      )
-    } else {
-      // loading screen
-      return (
-        <Container>
-          <RG.Centered>
-            <PokeballSpinner />
-          </RG.Centered>
-        </Container>
-      )
+    const {
+      status,
+      info,
+      stats,
+      effortValues,
+      moves,
+      groups,
+      misc
+    } = this.props
+    switch (status) {
+      case 'loading':
+        return <InfoDisplayLoading />
+      case 'errored':
+        return <InfoDisplayError />
+      case 'ready':
+        return (
+          <Container>
+            <RG.Row>
+              <RG.Col span='4'>
+                <SpriteVariantCard
+                  {...info}
+                  handleVariantChange={this.handleVariantChange}
+                />
+              </RG.Col>
+              <RG.Col span='8'>
+                <NameCard
+                  {...info}
+                />
+              </RG.Col>
+            </RG.Row>
+            <RG.Row>
+              <RG.Col span='6'>
+                <StatCard
+                  {...stats}
+                />
+              </RG.Col>
+              <RG.Col span='6'>
+                <EVCard
+                  {...effortValues}
+                />
+              </RG.Col>
+            </RG.Row>
+            <RG.Row>
+              <RG.Col span='6'>
+                <MoveCard
+                  moves={moves}
+                  groups={groups}
+                  handleGroupChange={this.handleGroupChange}
+                />
+              </RG.Col>
+              <RG.Col span='6'>
+                <MiscCard
+                  {...misc}
+                />
+              </RG.Col>
+            </RG.Row>
+          </Container>
+        )
+      default:
+        return <InfoDisplayWelcome />
     }
   }
 }
+
 export const InfoDisplayWelcome = () => (
   <Container>
     <RG.Centered>
       <Card>
         <h3>Welcome! Select a Pokemon from the list to begin.</h3>
       </Card>
+    </RG.Centered>
+  </Container>
+)
+export const InfoDisplayError = () => (
+  <Container>
+    <RG.Centered>
+      <h1>Something went wrong, sorry!</h1>
+    </RG.Centered>
+  </Container>
+)
+export const InfoDisplayLoading = () => (
+  <Container>
+    <RG.Centered>
+      <PokeballSpinner />
     </RG.Centered>
   </Container>
 )

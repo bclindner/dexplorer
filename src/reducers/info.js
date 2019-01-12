@@ -10,7 +10,7 @@ const lang = 'en'
 const initialState = {
   currentVariant: '',
   currentGroup: '',
-  loading: false,
+  status: '',
   info: {
     pokedexNumber: 0,
     name: '',
@@ -76,7 +76,7 @@ export default function info (state = initialState, action) {
     case REQUEST_SPECIES:
       return {
         ...state,
-        loading: true
+        status: 'loading'
       }
     case RECEIVE_SPECIES:
       // determine pokedex number (if available; if not, return null)
@@ -92,8 +92,9 @@ export default function info (state = initialState, action) {
       }))
       return {
         ...initialState,
+        currentVariant: action.data.name,
         // remain loading because we need to get default variant info before showing it to the user
-        loading: true,
+        status: 'loading',
         info: {
           ...initialState.info,
           pokedexNumber,
@@ -114,7 +115,7 @@ export default function info (state = initialState, action) {
     case REQUEST_VARIANT:
       return {
         ...state,
-        loading: true
+        status: 'loading'
       }
     case RECEIVE_VARIANT:
       // stats
@@ -132,10 +133,13 @@ export default function info (state = initialState, action) {
       const moves = action.data.moves.map(move => ({
         name: move.name,
         versionGroups: move.version_group_details.reduce((obj, versionGroup) => {
+          // get name
           const name = versionGroup.version_group.name
+          // add to the group array, if not done already
           if (!groups.includes(name)) {
             groups.push(name)
           }
+          // put the other attributes there with the name as the key
           obj[name] = {
             learnedBy: versionGroup.move_learn_method.name,
             level: versionGroup.level_learned_at
@@ -144,7 +148,9 @@ export default function info (state = initialState, action) {
         })
       }))
       return {
-        loading: false,
+        ...state,
+        currentVariant: action.data.name,
+        status: 'ready',
         info: {
           ...state.info,
           abilities: action.data.abilities.map(entry => entry.name),

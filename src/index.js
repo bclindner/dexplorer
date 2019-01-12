@@ -3,16 +3,11 @@ import ReactDOM from 'react-dom'
 import registerServiceWorker from './registerServiceWorker'
 
 import Dexplorer from './components/Main.js'
-import list from './reducers/list.js'
 
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import configureStore from './reducers/main.js'
 import { Provider } from 'react-redux'
 
-let store = createStore(
-  list,
-  applyMiddleware(thunk)
-)
+let store = configureStore()
 
 ReactDOM.render(
   <Provider store={store}>

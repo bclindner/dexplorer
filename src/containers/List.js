@@ -9,10 +9,7 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const mapStateToProps = state => ({
-  list: state.list,
-  loading: state.loading
-})
+const mapStateToProps = state => state.list
 
 export default connect(
   mapStateToProps,

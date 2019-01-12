@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": false,
   "dependencies": {
+    "connected-react-router": "^6.1.0",
+    "history": "^4.7.2",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

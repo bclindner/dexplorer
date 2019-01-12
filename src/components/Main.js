@@ -2,11 +2,13 @@ import React from 'react'
 import { RG, Wrapper } from './Layout.js'
 import { Header } from './Header.js'
 import { Footer } from './Footer.js'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
 import PokemonSidebar from '../containers/List'
-import { InfoDisplayContainer, InfoDisplayWelcome } from './Info.js'
+import InfoDisplay from '../containers/Info'
+import { history } from '../reducers/main'
 const Main = () => (
-  <BrowserRouter>
+  <ConnectedRouter history={history}>
     <Wrapper>
       <RG.Row>
         <RG.Col span='12'>
@@ -19,8 +21,7 @@ const Main = () => (
         </RG.Col>
         <RG.Col span='8'>
           <Switch>
-            <Route exact path={process.env.PUBLIC_URL + '/'} component={InfoDisplayWelcome} />
-            <Route path={process.env.PUBLIC_URL + '/:speciesName'} component={InfoDisplayContainer} />
+            <Route path={process.env.PUBLIC_URL + '/:pokemon?'} component={InfoDisplay} />
           </Switch>
         </RG.Col>
       </RG.Row>
@@ -30,6 +31,6 @@ const Main = () => (
         </RG.Col>
       </RG.Row>
     </Wrapper>
-  </BrowserRouter>
+  </ConnectedRouter>
 )
 export default Main

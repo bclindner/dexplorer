@@ -79,30 +79,34 @@ export class PokemonSidebar extends Component {
   componentDidMount () {
     this.props.getList()
   }
+  componentDidUpdate() {
+    console.log('updated')
+  }
   render () {
     const { loading, handleSearch, list } = this.props
+    let content = {}
     if (loading) {
-      return (
-        <Container>
-          <SearchBar placeholder='Search by name...' onChange={handleSearch} />
-          <RG.Centered>
-            <PokeballSpinner />
-          </RG.Centered>
-        </Container>
+      content = (
+        <RG.Centered>
+          <PokeballSpinner />
+        </RG.Centered>
       )
     } else {
-      return (
-        <Container>
-          <SearchBar placeholder='Search by name...' onChange={handleSearch} />
-          <List>
-            {list.filter(species => species.visible).map((species, i) => (
-              <ListLink to={process.env.PUBLIC_URL + '/' + species.name} key={i} activeClassName='activeLink'>
-                <ListItem>{species.prettyName}</ListItem>
-              </ListLink>
-            ))}
-          </List>
-        </Container>
+      content = (
+        <List>
+          {list.filter(species => species.visible).map((species, i) => (
+            <ListLink to={process.env.PUBLIC_URL + '/' + species.name} key={i} activeClassName='activeLink'>
+              <ListItem>{species.prettyName}</ListItem>
+            </ListLink>
+          ))}
+        </List>
       )
     }
+    return (
+      <Container>
+        <SearchBar placeholder='Search by name...' onChange={handleSearch} />
+        {content}
+      </Container>
+    )
   }
 }
