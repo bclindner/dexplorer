@@ -8,7 +8,7 @@ import PokemonSidebar from '../containers/List'
 import InfoDisplay from '../containers/Info'
 import { history } from '../reducers/main'
 const Main = () => (
-  <ConnectedRouter history={history} basename={process.env.PUBLIC_URL}>
+  <ConnectedRouter history={history}>
     <Wrapper>
       <RG.Row>
         <RG.Col span='12'>

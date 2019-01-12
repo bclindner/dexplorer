@@ -94,7 +94,7 @@ export class PokemonSidebar extends Component {
         <List>
           {list.filter(species => species.visible).map((species, i) => (
             <ListLink
-              to={process.env.PUBLIC_URL + '/' + species.name}
+              to={species.name}
               key={i}
               activeClassName='activeLink'
               onClick={() => getSpecies(species.name)}>
