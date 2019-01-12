@@ -1,4 +1,5 @@
 import styled, { injectGlobal } from 'styled-components'
+import PropTypes from 'prop-types'
 
 /**
  * Object containing Flexbox responsive grid components.
@@ -77,6 +78,9 @@ RG.Centered = styled.div`
 RG.Col = styled.div`
   flex: ${props => props.span * 8.33}%;
 `
+RG.propTypes = {
+  span: PropTypes.number.isRequired
+}
 
 /**
  * Simple responsive image.
