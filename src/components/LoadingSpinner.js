@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import pokeball from '../pokeball.png'
+import PropTypes from 'prop-types'
 
 /**
  * A nice spinning animation.
@@ -35,6 +36,9 @@ export const LoadingSpinner = styled.div`
   animation: ${spin} 1s ease-out infinite;
   margin: 1em;
 `
+LoadingSpinner.propTypes = {
+  url: PropTypes.string.isRequired
+}
 
 /**
  * LoadingSpinner, but with a Pokeball!
