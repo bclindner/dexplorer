@@ -100,7 +100,7 @@ export default function info (state = initialState, action) {
           ...initialState.info,
           pokedexNumber,
           name: action.data.names.find(entry => entry.language.name === lang).name,
-          genus: action.data.genera.find(entry => entry.language.name === lang).name,
+          genus: action.data.genera.find(entry => entry.language.name === lang).genus,
           variants
         },
         misc: {
@@ -193,7 +193,8 @@ export default function info (state = initialState, action) {
   }
 }
 
-// higher order function yeeeeeeee
+// higher-order function (takes group, returns sort function)
+// sorts a move list by level, then by name, with all 0-level moves displayed at the end of the list
 const sortMovesByGroup = currentGroup => (a, b) => {
   // if moves are both in current group, we can sort by level
   if (currentGroup in a.versionGroups && currentGroup in b.versionGroups) {
