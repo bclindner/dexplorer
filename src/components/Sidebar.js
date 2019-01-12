@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom'
 import { PokeballSpinner } from './LoadingSpinner.js'
 import { RG } from './Layout.js'
 import colors from '../utils/colors.js'
+import PropTypes from 'prop-types'
 /**
  * Styled sidebar container.
  */
@@ -112,4 +113,10 @@ export class PokemonSidebar extends Component {
       </Container>
     )
   }
+}
+PokemonSidebar.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  filterList: PropTypes.func.isRequired,
+  getSpecies: PropTypes.func.isRequired,
+  list: PropTypes.array.isRequired
 }
