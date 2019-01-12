@@ -102,7 +102,7 @@ export const StatBar = ({percent, color, label}) => (
 StatBar.propTypes = {
   percent: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired
+  label: PropTypes.node.isRequired
 }
 
 /**
@@ -284,14 +284,12 @@ export const EVCard = (effortValues) => (
   </Card>
 )
 EVCard.propTypes = {
-  effortValues: PropTypes.shape({
-    hp: PropTypes.number.isRequired,
-    atk: PropTypes.number.isRequired,
-    def: PropTypes.number.isRequired,
-    spatk: PropTypes.number.isRequired,
-    spdef: PropTypes.number.isRequired,
-    speed: PropTypes.number.isRequired
-  }).isRequired
+  hp: PropTypes.number.isRequired,
+  atk: PropTypes.number.isRequired,
+  def: PropTypes.number.isRequired,
+  spatk: PropTypes.number.isRequired,
+  spdef: PropTypes.number.isRequired,
+  speed: PropTypes.number.isRequired
 }
 
 /**
@@ -392,7 +390,7 @@ MiscCard.propTypes = {
   captureRate: PropTypes.number.isRequired,
   growthRate: PropTypes.string.isRequired,
   baseHappiness: PropTypes.number.isRequired,
-  baseExperience: PropTypes.number.isRequired,
+  baseExp: PropTypes.number.isRequired,
   genderRatio: PropTypes.number.isRequired
 }
 
@@ -401,7 +399,10 @@ MiscCard.propTypes = {
  */
 export class InfoDisplay extends Component {
   componentDidMount () {
-    this.props.getSpecies(this.props.pokemon)
+    // get the current pokemon on mount, if available
+    if (this.props.pokemon) {
+      this.props.getSpecies(this.props.pokemon)
+    }
   }
   render () {
     const {
