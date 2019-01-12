@@ -373,7 +373,7 @@ export const MiscCard = props => (
     </p>
     <p>
       <b>Base Experience</b>&nbsp;
-      {props.baseExperience}
+      {props.baseExp}
     </p>
     <p>
       <b>Gender Ratio</b> {props.genderRatio < 0
@@ -396,6 +396,10 @@ MiscCard.PropTypes = {
  * Pokemon informational display, including name, stats, moves, and a picture.
  */
 export class InfoDisplay extends Component {
+  componentDidMount () {
+    const pokemon = this.props.match.params.pokemon
+    this.props.getSpecies(pokemon)
+  }
   render () {
     const {
       status,

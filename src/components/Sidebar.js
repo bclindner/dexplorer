@@ -79,9 +79,6 @@ export class PokemonSidebar extends Component {
   componentDidMount () {
     this.props.getList()
   }
-  componentDidUpdate() {
-    console.log('updated')
-  }
   render () {
     const { loading, handleSearch, list } = this.props
     let content = {}

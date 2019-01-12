@@ -98,8 +98,8 @@ export default function info (state = initialState, action) {
         info: {
           ...initialState.info,
           pokedexNumber,
-          name: action.data.names.find(entry => entry.language.name === lang),
-          genus: action.data.genera.find(entry => entry.language.name === lang),
+          name: action.data.names.find(entry => entry.language.name === lang).name,
+          genus: action.data.genera.find(entry => entry.language.name === lang).name,
           variants
         },
         misc: {
@@ -132,22 +132,13 @@ export default function info (state = initialState, action) {
       let groups = []
       const moves = action.data.moves.map(move => ({
         name: move.name,
-        versionGroups: move.version_group_details.reduce((obj, versionGroup) => {
-          // get name
-          const name = versionGroup.version_group.name
-          // add to the group array, if not done already
-          if (!groups.includes(name)) {
-            groups.push(name)
-          }
-          // put the other attributes there with the name as the key
-          obj[name] = {
-            learnedBy: versionGroup.move_learn_method.name,
-            level: versionGroup.level_learned_at
-          }
-          return obj
-        })
+        versionGroups: move.version_group_details.map(versionGroup => ({
+          name: versionGroup.version_group.name,
+          learnedBy: versionGroup.move_learn_method.name,
+          level: versionGroup.level_learned_at
+        }))
       }))
-      return {
+      const newState = {
         ...state,
         currentVariant: action.data.name,
         status: 'ready',
@@ -182,6 +173,8 @@ export default function info (state = initialState, action) {
           baseExp: action.data.base_experience
         }
       }
+      console.log(newState)
+      return newState
     default: return state
   }
 }

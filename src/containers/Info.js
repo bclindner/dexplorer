@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getSpecies, getVariant } from '../actions/info'
 
 const mapDispatchToProps = dispatch => ({
-  getSpecies,
+  getSpecies: name => dispatch(getSpecies(name)),
   getVariant
 })
 

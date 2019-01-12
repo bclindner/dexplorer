@@ -5,14 +5,14 @@ export const getSpecies = name => dispatch => {
     .then(json => {
       dispatch(receiveSpecies(json))
       const defaultVariant = json.varieties.find(variety => variety.is_default)
-      dispatch(getVariant(defaultVariant))
+      dispatch(getVariant(defaultVariant.pokemon.name))
     })
 }
 
 export const REQUEST_SPECIES = 'REQUEST_SPECIES'
-export const requestSpecies = {
+export const requestSpecies = () => ({
   type: REQUEST_SPECIES
-}
+})
 
 export const RECEIVE_SPECIES = 'RECEIVE_SPECIES'
 export const receiveSpecies = data => ({
@@ -28,9 +28,9 @@ export const getVariant = name => dispatch => {
 }
 
 export const REQUEST_VARIANT = 'REQUEST_VARIANT'
-export const requestVariant = {
+export const requestVariant = () => ({
   type: REQUEST_VARIANT
-}
+})
 
 export const RECEIVE_VARIANT = 'RECEIVE_VARIANT'
 export const receiveVariant = data => ({
