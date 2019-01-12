@@ -2,7 +2,8 @@ import {
   REQUEST_SPECIES,
   RECEIVE_SPECIES,
   REQUEST_VARIANT,
-  RECEIVE_VARIANT
+  RECEIVE_VARIANT,
+  SELECT_GROUP
 } from '../actions/info.js'
 
 const lang = 'en'
@@ -111,11 +112,13 @@ export default function info (state = initialState, action) {
           genderRatio: action.data.gender_rate / 8 * 100
         }
       }
-      // determine genus
     case REQUEST_VARIANT:
+      // currently this is just for logging purposes; no need to change anything here
+      // even status shouldn't be changed:
+      // - the variant should stay ready when changing variant to keep the transition seamless
+      // - the variant should stay loading when intially loading variant because the component won't display otherwise
       return {
-        ...state,
-        status: state.status === 'ready' ? 'ready' : 'loading'
+        ...state
       }
     case RECEIVE_VARIANT:
       // stats
@@ -129,28 +132,29 @@ export default function info (state = initialState, action) {
       // maps move array
       // reduces version group details into an object
       // adds the groups into an array as well
-      const moves = action.data.moves.map(move => ({
-        name: move.name,
-        versionGroups: move.version_group_details.map(versionGroup => ({
-          name: versionGroup.version_group.name,
-          learnedBy: versionGroup.move_learn_method.name,
-          level: versionGroup.level_learned_at
-        }))
-      }))
       let groups = []
-      moves.forEach(move => move.versionGroups.forEach(versionGroup => {
-        if (!groups.includes(versionGroup.name)) {
-          groups.push(versionGroup.name)
-        }
-      }))
-      const newState = {
+      const moves = action.data.moves.map(move => ({
+        name: move.move.name,
+        versionGroups: move.version_group_details.reduce((obj, versionGroup) => {
+          const name = versionGroup.version_group.name
+          if (!groups.includes(name)) {
+            groups.push(name)
+          }
+          obj[name] = {
+            level: versionGroup.level_learned_at,
+            learnedBy: versionGroup.move_learn_method.name
+          }
+          return obj
+        }, {})
+      })).sort(sortMovesByGroup(groups[0]))
+      return {
         ...state,
         currentVariant: action.data.name,
         currentGroup: groups[0],
         status: 'ready',
         info: {
           ...state.info,
-          abilities: action.data.abilities.map(entry => entry.name),
+          abilities: action.data.abilities.map(entry => entry.ability.name),
           types: action.data.types.map(entry => entry.type.name),
           height: action.data.height / 10,
           weight: action.data.weight / 10,
@@ -179,8 +183,38 @@ export default function info (state = initialState, action) {
           baseExp: action.data.base_experience
         }
       }
-      console.log(newState)
-      return newState
+    case SELECT_GROUP:
+      return {
+        ...state,
+        currentGroup: action.group,
+        moves: state.moves.sort(sortMovesByGroup(action.group))
+      }
     default: return state
+  }
+}
+
+// higher order function yeeeeeeee
+const sortMovesByGroup = currentGroup => (a, b) => {
+  // if moves are both in current group, we can sort by level
+  if (currentGroup in a.versionGroups && currentGroup in b.versionGroups) {
+    const lvlA = a.versionGroups[currentGroup].level
+    const lvlB = b.versionGroups[currentGroup].level
+    // if both are 0, then alphabetize
+    if (lvlA === 0 && lvlB === 0) { return a.name > b.name }
+    // if one is 0, push it to the bottom of the list
+    if (lvlA === 0) { return 1 }
+    if (lvlB === 0) { return -1 }
+    // if the levels are equal, sort alphabetically
+    if (lvlA === lvlB) { return a.name > b.name }
+    // otherwise, we can actually sort by level
+    return lvlA > lvlB
+  } else {
+    // push all entries outside of the current group to the bottom of the list
+    if (!(currentGroup in a.versionGroups)) {
+      return -1
+    }
+    if (!(currentGroup in b.versionGroups)) {
+      return 1
+    }
   }
 }

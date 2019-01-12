@@ -108,26 +108,21 @@ StatBar.PropTypes = {
 /**
  * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants, if there are any.
  */
-class SpriteVariantCard extends Component {
-  render () {
-    const {currentVariant, sprite, variants} = this.props
-    return (
-      <Card>
-        <RG.Centered>
-          <RG.Image src={sprite} />
-        </RG.Centered>
-        {variants.length > 1 && (
-          <RG.Select onChange={(evt) => this.props.getVariant(evt.target.value)} value={currentVariant}>
-            {variants.map((variant, i) => (
-              <option value={variant.name} key={i}>{variant.name}</option>
-            ))}
-          </RG.Select>
-        )}
-      </Card>
-    )
-  }
-}
-SpriteVariantCard.PropTypes = {
+const SpriteVariantCard = ({sprite, variants, getVariant, currentVariant}) => (
+  <Card>
+    <RG.Centered>
+      <RG.Image src={sprite} />
+    </RG.Centered>
+    {variants.length > 1 && (
+      <RG.Select onChange={(evt) => getVariant(evt.target.value)} value={currentVariant}>
+        {variants.map((variant, i) => (
+          <option value={variant.name} key={i}>{variant.name}</option>
+        ))}
+      </RG.Select>
+    )}
+  </Card>
+)
+    SpriteVariantCard.PropTypes = {
   sprite: PropTypes.string.isRequired,
   variants: PropTypes.arrayOf(PropTypes.string),
   getVariant: PropTypes.func.isRequired
@@ -302,10 +297,10 @@ EVCard.PropTypes = {
 /**
  * Card which lists the Pokemon's moves.
  */
-export const MoveCard = ({currentGroup, handleGroupChange, groups, moves}) => (
+export const MoveCard = ({selectGroup, currentGroup, groups, moves}) => (
   <Card>
     <h2>Moveset</h2>
-    <RG.Select onChange={handleGroupChange}>
+    <RG.Select selected={currentGroup} onChange={(evt) => selectGroup(evt.target.value)}>
       {groups.map((group, i) => (
         <option value={group} key={i}>{group}</option>
       ))}
@@ -316,19 +311,21 @@ export const MoveCard = ({currentGroup, handleGroupChange, groups, moves}) => (
       <RG.Col span='5'><strong>Learned By</strong></RG.Col>
     </RG.StaticRow>
     <ScrollingMoveList>
-      {moves.filter(move => move.versionGroups.includes(currentGroup)).map((move, i) => (
+      {moves.filter(move => currentGroup in move.versionGroups).map((move, i) => (
         <RG.StaticRow key={i}>
           <RG.Col span='2'>
-            {}
+            {move.versionGroups[currentGroup].level === 0
+              ? '-'
+              : move.versionGroups[currentGroup].level}
           </RG.Col>
           <RG.Col span='5'>
             <Capitalize>
-              {}
+              {move.name}
             </Capitalize>
           </RG.Col>
           <RG.Col span='5'>
             <Capitalize>
-              {}
+              {move.versionGroups[currentGroup].learnedBy}
             </Capitalize>
           </RG.Col>
         </RG.StaticRow>
@@ -337,6 +334,8 @@ export const MoveCard = ({currentGroup, handleGroupChange, groups, moves}) => (
   </Card>
 )
 MoveCard.PropTypes = {
+  currentGroup: PropTypes.string.isRequired,
+  selectGroup: PropTypes.func.isRequired,
   groups: PropTypes.arrayOf(PropTypes.string).isRequired,
   moves: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
@@ -415,7 +414,8 @@ export class InfoDisplay extends Component {
       moves,
       groups,
       misc,
-      getVariant
+      getVariant,
+      selectGroup
     } = this.props
     switch (status) {
       case 'loading':
@@ -458,6 +458,7 @@ export class InfoDisplay extends Component {
                   groups={groups}
                   currentGroup={currentGroup}
                   handleGroupChange={this.handleGroupChange}
+                  selectGroup={selectGroup}
                 />
               </RG.Col>
               <RG.Col span='6'>

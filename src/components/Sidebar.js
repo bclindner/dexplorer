@@ -80,7 +80,7 @@ export class PokemonSidebar extends Component {
     this.props.getList()
   }
   render () {
-    const { loading, handleSearch, list } = this.props
+    const { loading, filterList, getSpecies, list } = this.props
     let content = {}
     if (loading) {
       content = (
@@ -92,7 +92,11 @@ export class PokemonSidebar extends Component {
       content = (
         <List>
           {list.filter(species => species.visible).map((species, i) => (
-            <ListLink to={process.env.PUBLIC_URL + '/' + species.name} key={i} activeClassName='activeLink'>
+            <ListLink
+              to={process.env.PUBLIC_URL + '/' + species.name}
+              key={i}
+              activeClassName='activeLink'
+              onClick={() => getSpecies(species.name)}>
               <ListItem>{species.prettyName}</ListItem>
             </ListLink>
           ))}
@@ -101,7 +105,9 @@ export class PokemonSidebar extends Component {
     }
     return (
       <Container>
-        <SearchBar placeholder='Search by name...' onChange={handleSearch} />
+        <SearchBar
+          placeholder='Search by name...'
+          onChange={(evt) => filterList(evt.target.value.trim())} />
         {content}
       </Container>
     )

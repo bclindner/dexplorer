@@ -17,7 +17,7 @@ export const requestSpecies = () => ({
 export const RECEIVE_SPECIES = 'RECEIVE_SPECIES'
 export const receiveSpecies = data => ({
   type: RECEIVE_SPECIES,
-  data: data
+  data
 })
 
 export const getVariant = name => dispatch => {
@@ -35,5 +35,11 @@ export const requestVariant = () => ({
 export const RECEIVE_VARIANT = 'RECEIVE_VARIANT'
 export const receiveVariant = data => ({
   type: RECEIVE_VARIANT,
-  data: data
+  data
+})
+
+export const SELECT_GROUP = 'SELECT_GROUP'
+export const selectGroup = group => ({
+  type: SELECT_GROUP,
+  group
 })
