@@ -52,7 +52,7 @@ const EVDisplay = styled.div`
   padding: 0.5em;
   text-align: center;
 `
-EVDisplay.PropTypes = {
+EVDisplay.propTypes = {
   color: PropTypes.string
 }
 EVDisplay.defaultProps = {
@@ -82,7 +82,7 @@ const StatBarInner = styled.div`
   width: ${props => props.percent}%;
   background-color: ${props => props.color};
 `
-StatBarInner.PropTypes = {
+StatBarInner.propTypes = {
   percent: PropTypes.number.isRequired,
   color: PropTypes.string
 }
@@ -99,7 +99,7 @@ export const StatBar = ({percent, color, label}) => (
     <StatBarInner percent={percent} color={color}>{label}</StatBarInner>
   </StatBarOuter>
 )
-StatBar.PropTypes = {
+StatBar.propTypes = {
   percent: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired
@@ -122,9 +122,9 @@ const SpriteVariantCard = ({sprite, variants, getVariant, currentVariant}) => (
     )}
   </Card>
 )
-    SpriteVariantCard.PropTypes = {
+SpriteVariantCard.propTypes = {
   sprite: PropTypes.string.isRequired,
-  variants: PropTypes.arrayOf(PropTypes.string),
+  variants: PropTypes.array.isRequired,
   getVariant: PropTypes.func.isRequired
 }
 
@@ -156,7 +156,7 @@ export const NameCard = props => (
     </Capitalize>
   </Card>
 )
-NameCard.PropTypes = {
+NameCard.propTypes = {
   pokedexNumber: PropTypes.number,
   name: PropTypes.string.isRequired,
   genus: PropTypes.string.isRequired,
@@ -226,7 +226,7 @@ export const StatCard = (stats) => (
     </table>
   </Card>
 )
-StatCard.PropTypes = {
+StatCard.propTypes = {
   hp: PropTypes.number.isRequired,
   atk: PropTypes.number.isRequired,
   def: PropTypes.number.isRequired,
@@ -283,7 +283,7 @@ export const EVCard = (effortValues) => (
     </RG.Row>
   </Card>
 )
-EVCard.PropTypes = {
+EVCard.propTypes = {
   effortValues: PropTypes.shape({
     hp: PropTypes.number.isRequired,
     atk: PropTypes.number.isRequired,
@@ -297,10 +297,10 @@ EVCard.PropTypes = {
 /**
  * Card which lists the Pokemon's moves.
  */
-export const MoveCard = ({selectGroup, currentGroup, groups, moves}) => (
+export const MoveCard = ({currentGroup, selectGroup, groups, moves}) => (
   <Card>
     <h2>Moveset</h2>
-    <RG.Select selected={currentGroup} onChange={(evt) => selectGroup(evt.target.value)}>
+    <RG.Select onChange={(evt) => selectGroup(evt.target.value)} selected={currentGroup}>
       {groups.map((group, i) => (
         <option value={group} key={i}>{group}</option>
       ))}
@@ -333,7 +333,7 @@ export const MoveCard = ({selectGroup, currentGroup, groups, moves}) => (
     </ScrollingMoveList>
   </Card>
 )
-MoveCard.PropTypes = {
+MoveCard.propTypes = {
   currentGroup: PropTypes.string.isRequired,
   selectGroup: PropTypes.func.isRequired,
   groups: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -387,7 +387,7 @@ export const MiscCard = props => (
     </p>
   </Card>
 )
-MiscCard.PropTypes = {
+MiscCard.propTypes = {
   eggGroups: PropTypes.arrayOf(PropTypes.string).isRequired,
   captureRate: PropTypes.number.isRequired,
   growthRate: PropTypes.string.isRequired,
@@ -457,7 +457,6 @@ export class InfoDisplay extends Component {
                   moves={moves}
                   groups={groups}
                   currentGroup={currentGroup}
-                  handleGroupChange={this.handleGroupChange}
                   selectGroup={selectGroup}
                 />
               </RG.Col>
