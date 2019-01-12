@@ -1,7 +1,7 @@
 import info from './info'
 import list from './list'
 
-import { createBrowserHistory } from 'history'
+import { createHashHistory } from 'history'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
@@ -14,7 +14,7 @@ const reducer = history => (
   })
 )
 
-export const history = createBrowserHistory()
+export const history = createHashHistory()
 
 const enhancer = () => (
   applyMiddleware(

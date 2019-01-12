@@ -404,6 +404,14 @@ export class InfoDisplay extends Component {
       this.props.getSpecies(this.props.pokemon)
     }
   }
+  componentDidUpdate () {
+    // set document title accordingly
+    if (this.props.pokemon) {
+      document.title = 'Dexplorer - ' + this.props.pokemon
+    } else {
+      document.title = 'Dexplorer'
+    }
+  }
   render () {
     const {
       status,

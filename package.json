@@ -23,7 +23,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://bclindner.github.io/dexplorer",
+  "homepage": "https://projects.bclindner.com/dexplorer",
   "devDependencies": {
     "gh-pages": "^2.0.0"
   },

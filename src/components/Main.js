@@ -21,7 +21,7 @@ const Main = () => (
         </RG.Col>
         <RG.Col span='8'>
           <Switch>
-            <Route path='/:pokemon(a-z\-)?' component={InfoDisplay} />
+            <Route path='/:pokemon([a-z-]+)?' component={InfoDisplay} />
           </Switch>
         </RG.Col>
       </RG.Row>
