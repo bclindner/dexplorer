@@ -105,13 +105,20 @@ StatBar.propTypes = {
   label: PropTypes.node.isRequired
 }
 
+export const SpritePlaceholder = styled.div`
+  font-size: 5em;
+`
+
 /**
  * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants, if there are any.
  */
 const SpriteVariantCard = ({ sprite, variants, getVariant, currentVariant }) => (
   <Card>
     <RG.Centered>
-      <SpriteImage src={sprite} />
+      {sprite
+        ? <SpriteImage src={sprite} />
+        : <SpritePlaceholder>?</SpritePlaceholder>
+      }
     </RG.Centered>
     {variants.length > 1 && (
       <StyledSelect onChange={(evt) => getVariant(evt.target.value)} value={currentVariant}>
