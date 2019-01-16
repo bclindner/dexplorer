@@ -39,6 +39,7 @@ export const List = styled.ul`
   @media only screen and (max-width: 800px) {
     max-height: 300px;
   }
+  scrollbar-color: ${colors.dark}
 `
 
 /**
@@ -82,7 +83,6 @@ export class PokemonSidebar extends Component {
   }
   render () {
     const { loading, filterList, getSpecies, list } = this.props
-    let content = {}
     if (loading) {
       return (
         <Container>
@@ -97,17 +97,17 @@ export class PokemonSidebar extends Component {
           <SearchBar
             placeholder='Search by name...'
             onChange={(evt) => filterList(evt.target.value.trim())} />
-            <List>
-              {list.filter(species => species.visible).map((species, i) => (
-                <ListLink
-                  to={species.name}
-                  key={i}
-                  activeClassName='activeLink'
-                  onClick={() => getSpecies(species.name)}>
-                  <ListItem>{species.prettyName}</ListItem>
-                </ListLink>
-              ))}
-            </List>
+          <List>
+            {list.filter(species => species.visible).map((species, i) => (
+              <ListLink
+                to={species.name}
+                key={i}
+                activeClassName='activeLink'
+                onClick={() => getSpecies(species.name)}>
+                <ListItem>{species.prettyName}</ListItem>
+              </ListLink>
+            ))}
+          </List>
         </Container>
       )
     }
