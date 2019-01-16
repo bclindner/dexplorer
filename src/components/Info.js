@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { RG } from './Layout.js'
+import { StyledSelect } from './StyledLayout'
 import { PokeballSpinner } from './LoadingSpinner.js'
 import colors from '../utils/colors.js'
 import PropTypes from 'prop-types'
@@ -94,7 +95,7 @@ StatBarInner.defaultProps = {
  * Simple stat bar component.
  * Takes percentage, color, and label attributes.
  */
-export const StatBar = ({percent, color, label}) => (
+export const StatBar = ({ percent, color, label }) => (
   <StatBarOuter>
     <StatBarInner percent={percent} color={color}>{label}</StatBarInner>
   </StatBarOuter>
@@ -108,17 +109,17 @@ StatBar.propTypes = {
 /**
  * Card to display the Pokemon sprite image, and a selector for the Pokemon's variants, if there are any.
  */
-const SpriteVariantCard = ({sprite, variants, getVariant, currentVariant}) => (
+const SpriteVariantCard = ({ sprite, variants, getVariant, currentVariant }) => (
   <Card>
     <RG.Centered>
       <RG.Image src={sprite} />
     </RG.Centered>
     {variants.length > 1 && (
-      <RG.Select onChange={(evt) => getVariant(evt.target.value)} value={currentVariant}>
+      <StyledSelect onChange={(evt) => getVariant(evt.target.value)} value={currentVariant}>
         {variants.map((variant, i) => (
           <option value={variant.name} key={i}>{variant.name}</option>
         ))}
-      </RG.Select>
+      </StyledSelect>
     )}
   </Card>
 )
@@ -295,14 +296,14 @@ EVCard.propTypes = {
 /**
  * Card which lists the Pokemon's moves.
  */
-export const MoveCard = ({currentGroup, selectGroup, groups, moves}) => (
+export const MoveCard = ({ currentGroup, selectGroup, groups, moves }) => (
   <Card>
     <h2>Moveset</h2>
-    <RG.Select onChange={(evt) => selectGroup(evt.target.value)} selected={currentGroup}>
+    <StyledSelect onChange={(evt) => selectGroup(evt.target.value)} selected={currentGroup}>
       {groups.map((group, i) => (
         <option value={group} key={i}>{group}</option>
       ))}
-    </RG.Select>
+    </StyledSelect>
     <RG.StaticRow>
       <RG.Col span='2'><strong>Lv.</strong></RG.Col>
       <RG.Col span='5'><strong>Move</strong></RG.Col>
