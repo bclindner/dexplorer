@@ -3,7 +3,7 @@ import api from '../utils/api'
 
 export const getList = () => (dispatch) => {
   dispatch(requestList())
-  api('//pokeapi.co/api/v2/pokemon-species/')
+  api('https://pokeapi.co/api/v2/pokemon-species/')
     .then(resp => resp.json())
     // simplify api result
     .then(json => json.results.map(result => ({
@@ -39,4 +39,3 @@ const prettyName = (name) => name.split('-').map((word) => {
   return word.charAt(0).toUpperCase() + word.substring(1)
   // then re-add the dashes
 }).join('-')
-
