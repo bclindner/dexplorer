@@ -3,8 +3,7 @@ import api from '../utils/api'
 
 export const getList = () => (dispatch) => {
   dispatch(requestList())
-  api('https://pokeapi.co/api/v2/pokemon-species/')
-    .then(resp => resp.json())
+  api('pokemon-species/')
     // simplify api result
     .then(json => json.results.map(result => ({
       name: result.name,

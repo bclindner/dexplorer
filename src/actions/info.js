@@ -2,8 +2,7 @@ import api from '../utils/api'
 
 export const getSpecies = name => dispatch => {
   dispatch(requestSpecies())
-  api(`https://pokeapi.co/api/v2/pokemon-species/${name}/`)
-    .then(resp => resp.json())
+  api(`pokemon-species/${name}/`)
     .then(json => {
       dispatch(receiveSpecies(json))
       const defaultVariant = json.varieties.find(variety => variety.is_default)
@@ -24,8 +23,7 @@ export const receiveSpecies = data => ({
 
 export const getVariant = name => dispatch => {
   dispatch(requestVariant())
-  api(`https://pokeapi.co/api/v2/pokemon/${name}/`)
-    .then(resp => resp.json())
+  api(`pokemon/${name}/`)
     .then(json => dispatch(receiveVariant(json)))
 }
 
