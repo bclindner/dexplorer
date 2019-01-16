@@ -75,10 +75,7 @@ const StatBarOuter = styled.td`
 const StatBarInner = styled.div`
   position:relative;
   height: 100%;
-  /* invert the color if the percentage is too low to display the stat inside the bar
-   * so that it can still be viewed
-   */
-  color: ${props => props.percent < 10 ? 'white' : colors.darker};
+  color: ${colors.darker};
   text-align: right;
   padding: 0 0.25em 0 0;
   box-sizing: border-box;
