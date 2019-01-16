@@ -34,7 +34,7 @@ export const LoadingSpinner = styled.div`
   background-repeat: norepeat;
   background-position: center;
   animation: ${spin} 1s ease-out infinite;
-  margin: 1em;
+  margin: 2em;
 `
 LoadingSpinner.propTypes = {
   url: PropTypes.string.isRequired
