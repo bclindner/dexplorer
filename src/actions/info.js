@@ -8,6 +8,7 @@ export const getSpecies = name => dispatch => {
       const defaultVariant = json.varieties.find(variety => variety.is_default)
       dispatch(getVariant(defaultVariant.pokemon.name))
     })
+    .catch(() => dispatch(infoRequestError()))
 }
 
 export const REQUEST_SPECIES = 'REQUEST_SPECIES'
@@ -21,10 +22,16 @@ export const receiveSpecies = data => ({
   data
 })
 
+export const INFO_REQUEST_ERROR = 'INFO_REQUEST_ERROR'
+const infoRequestError = () => ({
+  type: INFO_REQUEST_ERROR
+})
+
 export const getVariant = name => dispatch => {
   dispatch(requestVariant())
   api(`pokemon/${name}/`)
     .then(json => dispatch(receiveVariant(json)))
+    .catch(() => dispatch(infoRequestError()))
 }
 
 export const REQUEST_VARIANT = 'REQUEST_VARIANT'

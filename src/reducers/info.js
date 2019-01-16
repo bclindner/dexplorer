@@ -3,7 +3,8 @@ import {
   RECEIVE_SPECIES,
   REQUEST_VARIANT,
   RECEIVE_VARIANT,
-  SELECT_GROUP
+  SELECT_GROUP,
+  INFO_REQUEST_ERROR
 } from '../actions/info.js'
 import { sortMovesByGroup } from '../utils/sort'
 
@@ -75,6 +76,11 @@ const initialState = {
 
 export default function info (state = initialState, action) {
   switch (action.type) {
+    case INFO_REQUEST_ERROR:
+      return {
+        ...state,
+        status: 'errored'
+      }
     case REQUEST_SPECIES:
       return {
         ...state,
