@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { RG } from './Layout.js'
-import { StyledSelect } from './StyledLayout'
+import { StyledSelect, SpriteImage } from './StyledLayout'
 import { PokeballSpinner } from './LoadingSpinner.js'
 import colors from '../utils/colors.js'
 import PropTypes from 'prop-types'
@@ -112,7 +112,7 @@ StatBar.propTypes = {
 const SpriteVariantCard = ({ sprite, variants, getVariant, currentVariant }) => (
   <Card>
     <RG.Centered>
-      <RG.Image src={sprite} />
+      <SpriteImage src={sprite} />
     </RG.Centered>
     {variants.length > 1 && (
       <StyledSelect onChange={(evt) => getVariant(evt.target.value)} value={currentVariant}>

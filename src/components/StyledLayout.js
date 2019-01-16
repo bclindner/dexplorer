@@ -7,3 +7,7 @@ export const StyledSelect = styled(RG.Select)`
   color: ${colors.light};
   border-radius: 2px;
 `
+
+export const SpriteImage = styled(RG.Image)`
+  image-rendering: pixelated;
+`
