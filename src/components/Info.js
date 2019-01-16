@@ -80,6 +80,8 @@ const StatBarInner = styled.div`
    */
   color: ${props => props.percent < 10 ? 'white' : colors.darker};
   text-align: right;
+  padding: 0 0.25em 0 0;
+  box-sizing: border-box;
   width: ${props => props.percent}%;
   background-color: ${props => props.color};
 `
