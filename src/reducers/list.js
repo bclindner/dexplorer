@@ -1,11 +1,12 @@
 import {
   REQUEST_LIST,
   RECEIVE_LIST,
-  FILTER_LIST
+  FILTER_LIST,
+  LIST_ERROR
 } from '../actions/list.js'
 
 const initialState = {
-  loading: true,
+  status: 'loading',
   list: []
 }
 
@@ -14,13 +15,18 @@ export default function list (state = initialState, action) {
     case REQUEST_LIST:
       return {
         ...state,
-        loading: true
+        status: 'loading'
       }
     case RECEIVE_LIST:
       return {
         ...state,
-        loading: false,
+        status: 'ready',
         list: action.list
+      }
+    case LIST_ERROR:
+      return {
+        ...state,
+        status: 'errored'
       }
     case FILTER_LIST:
       return {

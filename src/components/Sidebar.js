@@ -82,39 +82,50 @@ export class PokemonSidebar extends Component {
     this.props.getList()
   }
   render () {
-    const { loading, filterList, getSpecies, list } = this.props
-    if (loading) {
-      return (
-        <Container>
-          <RG.Centered>
-            <PokeballSpinner />
-          </RG.Centered>
-        </Container>
-      )
-    } else {
-      return (
-        <Container>
-          <SearchBar
-            placeholder='Search by name...'
-            onChange={(evt) => filterList(evt.target.value.trim())} />
-          <List>
-            {list.filter(species => species.visible).map((species, i) => (
-              <ListLink
-                to={species.name}
-                key={i}
-                activeClassName='activeLink'
-                onClick={() => getSpecies(species.name)}>
-                <ListItem>{species.prettyName}</ListItem>
-              </ListLink>
-            ))}
-          </List>
-        </Container>
-      )
+    const { status, filterList, getSpecies, list } = this.props
+    switch (status) {
+      case 'loading':
+      default:
+        return (
+          <Container>
+            <RG.Centered>
+              <PokeballSpinner />
+            </RG.Centered>
+          </Container>
+        )
+      case 'ready':
+        return (
+          <Container>
+            <SearchBar
+              placeholder='Search by name...'
+              onChange={(evt) => filterList(evt.target.value.trim())} />
+            <List>
+              {list.filter(species => species.visible).map((species, i) => (
+                <ListLink
+                  to={species.name}
+                  key={i}
+                  activeClassName='activeLink'
+                  onClick={() => getSpecies(species.name)}>
+                  <ListItem>{species.prettyName}</ListItem>
+                </ListLink>
+              ))}
+            </List>
+          </Container>
+        )
+      case 'errored':
+        return (
+          <Container>
+            <RG.Centered>
+              <h1><span role='img' aria-label='Error!'>😢</span></h1>
+            </RG.Centered>
+          </Container>
+        )
     }
   }
 }
+
 PokemonSidebar.propTypes = {
-  loading: PropTypes.bool.isRequired,
+  status: PropTypes.string.isRequired,
   filterList: PropTypes.func.isRequired,
   getSpecies: PropTypes.func.isRequired,
   list: PropTypes.array.isRequired
