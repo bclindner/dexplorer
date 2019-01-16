@@ -6,7 +6,7 @@ import debounce from '../utils/debounce'
 
 const mapDispatchToProps = dispatch => ({
   getList: () => dispatch(getList()),
-  filterList: debounce((term) => dispatch(filterList(term)), 200),
+  filterList: debounce((term) => dispatch(filterList(term)), 100),
   getSpecies: (species) => dispatch(getSpecies(species))
 })
 
