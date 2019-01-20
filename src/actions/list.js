@@ -3,7 +3,7 @@ import api from '../utils/api'
 
 export const getList = () => (dispatch) => {
   dispatch(requestList())
-  api('pokemon-species/')
+  api('pokemon-species/?limit=1000')
     .then(json => json.results.map(result => ({
       name: result.name,
       prettyName: prettyName(result.name),
